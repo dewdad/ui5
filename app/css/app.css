@@ -1,0 +1,7 @@
+/*in Standard List Item, in case the content of the "Title", "Description", "Info" grows:
+	- avoid shrinking of image on the left hand side by setting a min-width
+	- avoid shrinking of the navigation button icon on the right*/
+.sapMSLIImgFirst,
+.sapMSLI .sapMLIBImgNav{
+	flex:none;
+}

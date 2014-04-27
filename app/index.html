@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>New App</title>
+		<script id="sap-ui-bootstrap"
+			type="text/javascript"
+			src="https://sapui5.hana.ondemand.com/sdk/resources/sap-ui-core.js"
+			data-sap-ui-xx-bindingSyntax="complex"
+			data-sap-ui-libs="sap.m"
+			data-sap-ui-theme="sap_bluecrystal"
+			data-sap-ui-rootComponent="app"
+			data-sap-ui-xx-rootComponentNode="content"
+			data-sap-ui-resourceroots='{"app": "./"}' >
+		</script>
+        <script type="text/javascript" src="lib/hereAppIdAndToken.js"></script>
+        <script type="text/javascript" src="lib/hereAsyncLoader.js"
+                     id="HereMapsLoaderScript"
+                     data-map-container="mapContainer"
+                     data-params="maps,datarendering"
+                     data-callback="afterHereMapLoad">
+
+        </script>
+		<!-- add other libraries to 'data-sap-ui-libs' attribute if required -->
+	</head>
+
+	<body class="sapUiBody" role="application">
+		<div id="content"></div>
+	</body>
+</html>

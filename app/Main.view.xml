@@ -1,0 +1,11 @@
+<sap.ui.core:View controllerName="app.Main"
+    xmlns="sap.m"
+    xmlns:sap.ui.core.mvc="sap.ui.core.mvc"
+    xmlns:sap.ui.core="sap.ui.core" >
+    <App id="app" defaultTransitionName="slide">
+        <pages>
+            <sap.ui.core.mvc:XMLView viewName="app.view.ServiceCoverage"></sap.ui.core.mvc:XMLView>
+            <sap.ui.core.mvc:XMLView id="page2" viewName="app.view.CoverageMap"></sap.ui.core.mvc:XMLView>
+        </pages>
+    </App>
+</sap.ui.core:View>
