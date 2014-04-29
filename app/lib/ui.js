@@ -63,7 +63,7 @@ $.sap.declare('mui');
          *
          * @param oView supports the sap.ui.view API completely, and adds support of singleton pattern by passing domId, and shortHand
          * </br>such as sui.view("path.to.viewResource"), which will create the view with the ID, the type defaults to JSview.
-         * @param viewData pass an object to the view's updateView method, which does something and returns the view itself
+         * @param viewData pass an object to the view's updateView method, which does something and returns the view itself (optional)
          * @return {sap.ui.view}
          */
         View: function(oView, viewData){

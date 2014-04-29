@@ -39,7 +39,7 @@ sap.ui.controller("app.view.ServiceCoverage", {
 
     onCoverageToggle: function(oEvt) {
         var CoverageContainer = this.byId('CoverageContainer');
-        CoverageContainer.addItem(ui.View('app.view.CoverageMap'));
+        CoverageContainer.addItem(ui.View('app.view.CoverageMap').setHeight('600px'));
 //        var context;
 //        try{
 //            context = oEvt.getSource && oEvt.getSource() ? oEvt.getSource().getBindingContext().getPath().substring(1) : this.getView().getBindingContext().getPath().substring(1);

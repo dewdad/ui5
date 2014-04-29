@@ -1,8 +1,9 @@
 <sap.ui.core:View xmlns:html="http://www.w3.org/1999/xhtml" controllerName="app.view.CoverageMap"
     xmlns="sap.m"
-    xmlns:sap.ui.core="sap.ui.core" >
+    xmlns:sap.ui.core="sap.ui.core"
+    xmlns:lib="app.lib">
 
-    <!--<html:script type="text/javascript" src="lib/hereAppIdAndToken.js"></html:script>-->
+    <!--<html:script type="text/javascript" src="lib/heremapConfig.js"></html:script>-->
     <!--<html:script type="text/javascript" src="lib/jQl.min.js"></html:script>-->
     <!--<html:script type="text/javascript" src="lib/hereAsyncLoader.js"-->
                  <!--id="HereMapsLoaderScript"-->
@@ -12,5 +13,7 @@
 
     <!--</html:script>-->
 
-    <html:div style="height:100%" id="mapContainer"></html:div>
+    <!--<html:div style="height:100%" id="mapContainer"></html:div>-->
+    <lib:heremap></lib:heremap>
+
 </sap.ui.core:View>
