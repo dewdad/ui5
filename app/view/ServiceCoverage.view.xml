@@ -46,20 +46,21 @@
                                 <items>
                                     <Button
                                         type="Transparent"
-                                        icon="sap-icon://globe">
+                                        icon="sap-icon://globe"
+                                        press="onCoverageToggle">
                                     </Button>
                                 </items>
                             </HBox>
                         </items>
                     </HBox>
-                    <VBox>
-                        <items>
+                    <VBox id="CoverageContainer">
+<!--                         <items>
                             <mvc:XMLView
                                 height="600px"
                                 id="CoverageMap"
                                 viewName="app.view.CoverageMap">
                             </mvc:XMLView>
-                        </items>
+                        </items> -->
                     </VBox>
                 </items>
             </VBox>

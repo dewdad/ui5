@@ -1,3 +1,5 @@
+$.sap.require('app.lib.ui')
+
 /**
  * Controller. Handles all events of the view.
  */
@@ -35,7 +37,9 @@ sap.ui.controller("app.view.ServiceCoverage", {
     //   }
 
 
-    onButtonPress: function(oEvt) {
+    onCoverageToggle: function(oEvt) {
+        var CoverageContainer = this.byId('CoverageContainer');
+        CoverageContainer.addItem(ui.View('app.view.CoverageMap'));
 //        var context;
 //        try{
 //            context = oEvt.getSource && oEvt.getSource() ? oEvt.getSource().getBindingContext().getPath().substring(1) : this.getView().getBindingContext().getPath().substring(1);

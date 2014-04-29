@@ -9,13 +9,13 @@ sap.ui.controller("app.view.CoverageMap" , {
 	* @memberOf app.view.page2
 	*/ 
 	   onInit: function() {
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this); 
-			oRouter.attachRouteMatched(function(oEvt) { 
-				if (oEvt.getParameter("name") === "page2") { 
-					var sContextPath = "/" + oEvt.getParameter("arguments").context; 
-					this.getView().bindElement(sContextPath); 
-				} 
-			}, this);
+//			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+//			oRouter.attachRouteMatched(function(oEvt) {
+//				if (oEvt.getParameter("name") === "page2") {
+//					var sContextPath = "/" + oEvt.getParameter("arguments").context;
+//					this.getView().bindElement(sContextPath);
+//				}
+//			}, this);
 	   },
 	
 	/**		
