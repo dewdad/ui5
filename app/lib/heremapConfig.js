@@ -1,5 +1,6 @@
 // This file holds all the constants used in the Demos.
 (function (exports, ctx) {
+    var global = exports;
     function authenticate(settings) {
         // Add your own appId and token here
         // sign in and register on http://developer.here.com
@@ -72,7 +73,11 @@
       },
       loadHereMaps: function(callback){
           var cb = callback;
-          $.getScript(HereMaps.config.JSLibs.HereMapsUrl, function(){hereMapLoaderCallback(cb)});
+          if(!!global.nokia && !!global.nokia.maps){
+            cb();
+          }else{
+            $.getScript(HereMaps.config.JSLibs.HereMapsUrl, function(){hereMapLoaderCallback(cb);});
+          }
       }
   }
 })(window, document);

@@ -36,20 +36,26 @@ sap.ui.controller("app.view.ServiceCoverage", {
     //
     //   }
 
-
-    onCoverageToggle: function(oEvt) {
-        var CoverageContainer = this.byId('CoverageContainer');
-        CoverageContainer.addItem(ui.View('app.view.CoverageMap').setHeight('600px'));
-//        var context;
-//        try{
-//            context = oEvt.getSource && oEvt.getSource() ? oEvt.getSource().getBindingContext().getPath().substring(1) : this.getView().getBindingContext().getPath().substring(1);
-//        }catch(e){
-//            context = '';
-//        }
-//
-//        sap.ui.core.UIComponent.getRouterFor(this).navTo("page2", {
-//         context: context
-//        });
+    handleNav: function(evt) {
+        var navCon = this.getView().byId("CoverageContainer");
+        var target = evt.getSource().data("target");
+        var oToggleBtn = evt.oSource; // the toggle button
+        if (target) {
+            var isMapButton = /globe$/.test(oToggleBtn.getIcon());
+            //var animation = this.getView().byId("animationSelect").getSelectedKey();
+            var cData = oToggleBtn.getCustomData()[0];
+            if(isMapButton){
+                oToggleBtn.setIcon('sap-icon://table-chart'); // toggle icon
+                // toggle target
+                cData.setValue('CoverageReport');
+            }else{
+                oToggleBtn.setIcon('sap-icon://globe');
+                cData.setValue('CoverageMap');
+            }
+            navCon.to(this.getView().byId(target)/*, animation*/);
+        } else {
+          navCon.back();
+        }
     }
 
 

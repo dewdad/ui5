@@ -44,9 +44,10 @@ sap.ui.core.Control.extend("app.lib.heremap", {
                     $.sap.domById(that.getId()+"-map"),
                     options
                 );
-                that._map.addListener('displayready', function () {
-                    that.fireDisplayReady({map: that._map});
+                that._map.addListener('displayready', function (evt) {
+                    that.fireDisplayReady({map: that._map, mapEvent: evt});
                 }, false);
+                // TODO: Implement missing events from http://developer.here.com/javascript-apis/documentation/maps/topics_api_pub/nokia.maps.map.Display.html
             });
         } else {  // after subsequent rerenderings, the map needs to get the current values set
             this._map.setCenter(new nokia.maps.geo.Coordinate(this.getLatitude(),this.getLongitude()));

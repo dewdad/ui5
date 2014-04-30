@@ -44,7 +44,9 @@ sap.ui.controller("app.view.CoverageMap" , {
 	//		
 	//   }
 
-    afterHereMapLoad: function(theMap) {
+    onMapReady: function(theMap) {
+		console.log('map is ready');
+		return;
         map = theMap;
         map.set('zoomLevel', 2);
         map.set('center', [30, -54]);
