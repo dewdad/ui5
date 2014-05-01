@@ -44,18 +44,17 @@ sap.ui.controller("app.view.CoverageMap" , {
 	//		
 	//   }
 
-    onMapReady: function(theMap) {
+    onMapReady: function(evt) {
 		console.log('map is ready');
-		return;
-        map = theMap;
-        map.set('zoomLevel', 2);
-        map.set('center', [30, -54]);
-        var container = new nokia.maps.map.Container();
-        map.objects.add(container);
-        //pointGenerator = new randomLocationGenerator(10);
-        //$("#ticker").text("Generating 700 Coordinates. Please Wait");
-        //pointGenerator.createCoordinates(onCoordinatesCreated);
-        //$.getJSON('data/counterpois.json', onCoordinatesCreated);
+        var map = evt.oSource;
+        $.getJSON('model/counterpois.json', $.proxy(map.addClusteredData, map));
+        // load clustering before requesting the cluster feature //TODO: add clustering feature on request to ui5 map control addClusteredData
+        /*nokia.Features.load(
+            nokia.Features.getFeaturesFromMatrix(['maps','datarendering']),
+            function(){$.getJSON('model/counterpois.json', $.proxy(map.addClusteredData, map));},
+            null,
+            false
+        );*/
     }
 	
 });
