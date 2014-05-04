@@ -48,7 +48,7 @@ sap.ui.controller("app.view.CoverageMap" , {
 		console.log('map is ready');
         var map = evt.oSource;
         $.getJSON('model/counterpois.json', $.proxy(map.addClusteredData, map));
-        // load clustering before requesting the cluster feature //TODO: add clustering feature on request to ui5 map control addClusteredData
+        // load clustering before requesting the cluster feature //TODO: add clustering (datarendering) feature on request to ui5 map control addClusteredData
         /*nokia.Features.load(
             nokia.Features.getFeaturesFromMatrix(['maps','datarendering']),
             function(){$.getJSON('model/counterpois.json', $.proxy(map.addClusteredData, map));},
