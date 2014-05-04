@@ -1,11 +1,8 @@
 // PART 1: define the new GoogleMap Control type
-var heremap_resource = 'app.lib.heremap';
-$.sap.declare(heremap_resource);
-//$.sap.require(heremap_resource+'Config')
+var heremap_ns = 'app.lib.HereMap';
+$.sap.declare(heremap_ns);
 
-//$.sap.includeScript('http://js.cit.api.here.com/se/2.5.4/jsl.js?with=all');
-
-sap.ui.core.Control.extend("app.lib.heremap", {
+sap.ui.core.Control.extend(heremap_ns, {
     metadata : {
         properties : {          // setter and getter are created behind the scenes, incl. data binding and type validation
             latitude: {type : "float", defaultValue: 25.309292795217956},
