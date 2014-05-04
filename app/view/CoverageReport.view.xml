@@ -5,7 +5,7 @@
 	xmlns="sap.ui.commons"
 	xmlns:html="http://www.w3.org/1999/xhtml"
 	controllerName="app.view.CoverageReport">
-	<Panel text="Hello World from an XML view">
+	<Panel text="Please press the globe button on the top right to toggle to the map view!">
 		<Button text="Button" press="doSomething"></Button>
 	</Panel>
 </core:View>
