@@ -7,7 +7,7 @@
 
     <Page
         id="page"
-        title="Blank page">
+        title="Here map with composite clustering">
         <content>
             <VBox
                 width="100%"
