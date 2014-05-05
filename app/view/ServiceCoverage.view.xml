@@ -31,7 +31,7 @@
                                 <items>
                                     <Button
                                         class="appdesignerDraggable"
-                                        text="page2"
+                                        text="I do nothing!"
                                         width="100%"
                                         press="onButtonPress">
                                     </Button>
