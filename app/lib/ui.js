@@ -66,7 +66,7 @@ $.sap.declare('mui');
          * @param viewData pass an object to the view's updateView method, which does something and returns the view itself (optional)
          * @return {sap.ui.view}
          */
-        View: function(oView, viewData){
+        view: function(oView, viewData){
             var viewObj= oView || {};
             var strArg = false;                                                                                                                                                                                                                                                                                                                                             
             if(typeof(oView) == 'string'){
