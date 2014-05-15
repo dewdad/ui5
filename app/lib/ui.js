@@ -49,7 +49,7 @@ $.sap.declare('mui');
          * tree path for view selection
          */
         byNestedId: function(){
-            var viewIdArr = argumentsToArray(arguments);
+            var viewIdArr = Array.prototype.slice.call(arguments);
             var viewId = viewIdArr.join('--');
             return ui.byId(viewId);
         },
