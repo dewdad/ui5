@@ -98,10 +98,11 @@ $.sap.declare('mui');
             try{
                 oView = sap.ui.view(viewObj)
             }catch(e){
+                console.log(e);
                 viewObj.type = 'XML';
                 try{oView = sap.ui.view(viewObj);}
                 catch(e){
-                    err = e;
+                    console.log(e);
                 }
             }
             
