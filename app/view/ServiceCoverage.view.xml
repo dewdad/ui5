@@ -47,7 +47,7 @@
                                 <items>
                                     <Button
                                         type="Transparent"
-                                        icon="sap-icon://globe"
+                                        icon="sap-icon://table-chart"
                                         press="handleNav">
                                         <layoutData>
                                           <FlexItemData growFactor="1" />
@@ -66,43 +66,18 @@
                       id="CoverageContainer"
                       height="600px"
                       class="navContainerControl">
+                    <mvc:XMLView
+                            height="100%"
+                            id="CoverageMap"
+                            viewName="app.view.CoverageMap">
+                    </mvc:XMLView>
                       <mvc:XMLView
                         id="CoverageReport"
                         viewName="app.view.CoverageReport">
                       </mvc:XMLView>
-                      <mvc:XMLView
-                        height="600px"
-                        id="CoverageMap"
-                        viewName="app.view.CoverageMap">
-                      </mvc:XMLView>
-                       <!-- <Page
-                        id="p2"
-                        title="Page 2"
-                        enableScrolling="false" >
-                        <Image src="resource/img/large_HT-1073.jpg" />
-                      </Page>
-                      <Page
-                        id="p3"
-                        title="Page 3"
-                        enableScrolling="false" >
-                        <Image src="resource/img/large_HT-1112.jpg" />
-                      </Page>
-                      <Page
-                        id="p4"
-                        title="Page 4"
-                        enableScrolling="false" >
-                        <Image src="resource/img/large_HT-1063.jpg" />
-                      </Page> -->
+
                     </NavContainer>
-                     <!--<VBox id="CoverageContainer">
-                       <items>
-                            <mvc:XMLView
-                                height="600px"
-                                id="CoverageMap"
-                                viewName="app.view.CoverageMap">
-                            </mvc:XMLView>
-                        </items> 
-                    </VBox>-->
+
                 </items>
             </VBox>
         </content>
