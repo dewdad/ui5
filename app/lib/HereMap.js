@@ -192,11 +192,6 @@ sap.ui.core.Control.extend(heremap_ns, {
                                     compositePointsCount++;
                                     compositePointsSum += currDataPoint.count;
                                 }
-                                if(!!currDataPoint.mapMarkers){
-                                    map.objects.removeAll(currDataPoint.mapMarkers);
-                                    currDataPoint.mapMarkers = null;
-                                    removedFromMap[currDataPoint.id] = true;
-                                }
                             }
                             dataPointsSize += compositePointsSum - compositePointsCount;
 
@@ -210,14 +205,11 @@ sap.ui.core.Control.extend(heremap_ns, {
                     },
                     // Add a Standard Marker for Noise Points.
                     getNoisePresentation : function (dataPoint) {
-                        //return new nokia.maps.map.StandardMarker([dataPoint.latitude, dataPoint.longitude]);
-                        // TODO: this is a work around because the getNoisePresentation method can only return StandardMarker type as of v. nokiamapsapi-2.5.4-Oberon-20140128
-                        if(!!dataPoint.mapMarkers && !!dataPoint.count && map.getZoom()>2) return;
-                        var marker
-                        if(!!dataPoint.count){
+                        var marker;
+                        if(!!dataPoint.count && dataPoint.count > 1){
                             marker = new nokia.maps.map.Marker([dataPoint.latitude, dataPoint.longitude],
                                 {
-                                    id: dataPoint.id,
+                                    //id: dataPoint.id,
                                     icon: createIcon(dataPoint.count),
                                     anchor: new nokia.maps.util.Point(25, 25)
                                 }
@@ -226,22 +218,23 @@ sap.ui.core.Control.extend(heremap_ns, {
                             marker = new nokia.maps.map.StandardMarker(
                                 [dataPoint.latitude, dataPoint.longitude]
                             );
-                                 }
-                        marker.data = dataPoint;
-                        dataPoint.mapMarkers = dataPoint.mapMarkers || [];
-                        dataPoint.mapMarkers.push(marker);
+                        }
 
-                        map.objects.add(marker);
-                        insertCounters[dataPoint.id] = (insertCounters[dataPoint.id] || 0) +1;
-
+                        return marker;
                     }
                 };
-                var clusterProvider = new nokia.maps.clustering.ClusterProvider(map, {
-                    eps: 16,
-                    minPts: 1,
-                    dataPoints: dataPoints,
-                    theme : svgTheme
-                });
+
+                if (!!this.clusterProvider) {
+                    this.clusterProvider.clean();
+                    this.clusterProvider.addAll(dataPoints);
+                } else {
+                    this.clusterProvider = ncp = new nokia.maps.clustering.ClusterProvider(map, {
+                        eps: 16,
+                        minPts: 1,
+                        dataPoints: dataPoints,
+                        theme : svgTheme
+                    });
+                }
 
                 function createIcon (count) {
                     var digit = Math.min(3, 4 - Math.floor(Math.log(count) / Math.log(10)));
@@ -261,7 +254,7 @@ sap.ui.core.Control.extend(heremap_ns, {
                     ));
                 }
 
-                clusterProvider.cluster();
+                this.clusterProvider.cluster();
             }
         }
     }
