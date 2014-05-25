@@ -7,49 +7,84 @@ sap.ui.core.Control.extend(heremap_ns, {
         properties : {          // setter and getter are created behind the scenes, incl. data binding and type validation
             latitude: {type : "float", defaultValue: 25.309292795217956},
             longitude: {type : "float", defaultValue: -27.319959104061127},
-            zoomLevel: {type : "integer", defaultValue: 2}
+            zoomLevel: {type : "int", defaultValue: 2},
+            height: {type: "sap.ui.core.CSSSize", defaultValue: "100%"},
+            width: {type: "sap.ui.core.CSSSize", defaultValue: "100%"},
+            displayComponents: {type: "string", defaultValue: "ZoomBar,Behavior"}
         },
         events: {
             "displayReady": {}
         }
     },
+    setLatitude: function(fValue){
+        return this.setProperty('latitude', parseFloat(fValue));
+    },
+    setLongitude: function(fValue){
+        return this.setProperty('longitude', parseFloat(fValue));
+    },
     init: function(){
-        this._html = new sap.ui.core.HTML({content:"<div style='height:100%;width:100%;' id='" + this.getId()+"-map'></div>"});
+        //this._html = new sap.ui.core.HTML({content:"<div style='height:100%;width:100%;' id='" + this.getId()+"-map'></div>"});
     },
     renderer : function(oRm, oControl) {
-        oRm.write("<div style='height:100%;width:100%;' ");
-        oRm.writeControlData(oControl);  // writes the Control ID and enables event handling - important!
+        oRm.write("<div ");
+        oRm.writeControlData(oControl);
+        oRm.write(['style="width:',oControl.getWidth(),'; height:', oControl.getHeight(),';" '].join(''));
+        // TODO: this is the right way but doesn't work
+        /*oRm.addStyle("width", oControl.getWidth());
+         oRm.addStyle("height", oControl.getHeight());*/
         oRm.write(">");
-        oRm.renderControl(oControl._html);
+        //oRm.renderControl(oControl._html);
         oRm.write("</div>");
     },
     onAfterRendering : function() {
         var that = this;
-        if (!this.initialized) {      // after the first rendering initialize the map
+        //if (!this.initialized) {      // after the first rendering initialize the map
             HereMaps.loadHereMaps(function(){
-                that.initialized = true;
+            //that.initialized = true;
+
+//                var baseMapProvider = new nokia.maps.map.provider.ImgTileProvider({
+//                    label: "normal.day",
+//                    descr: "Nokia Base Map tile provider",
+//                    width: 256,
+//                    height: 256,
+//                    min: 3,
+//                    max: 20,
+//                    getUrl: function( level, row, col ) {
+//                        // This uses the CIT server. Replace with LIVE when ready.
+//                        return ['https://1.base.maps.cit.api.here.com/maptile/', '2.1',
+//                            '/maptile/', 'newest', '/',
+//                            'normal.day/', level, '/', col, '/', row, '/', '256',
+//                            '/png?lg=EN',
+//                            '&app_code=', HereMaps.config.AppIdAndToken.appCode,
+//                            '&app_id=', HereMaps.config.AppIdAndToken.appId ].join('')
+//                    }
+//                });
+            // build components array from string property
+            var componentsArr = that.getDisplayComponents().replace(' ','').split(',');
+            var components = $.map(componentsArr, function(v){return new nokia.maps.map.component[v]();});
+
+            // map display options
                 var options = {
                     zoomLevel:that.getZoomLevel(),
                     center: [that.getLatitude(),that.getLongitude()],
-                    components: [
-                        // ZoomBar provides a UI to zoom the map in & out
-                        new nokia.maps.map.component.ZoomBar(),
-                        new nokia.maps.map.component.Behavior()
-                    ]
+                components: components
+                //,baseMapType: baseMapProvider
                 };
                 that._map = new nokia.maps.map.Display(
-                    $.sap.domById(that.getId()+"-map"),
+                $.sap.domById(that.getId()/*+"-map"*/),
                     options
                 );
+
+            //that._map.set("baseMapType", baseMapProvider);
                 that._map.addListener('displayready', function (evt) {
                     that.fireDisplayReady({map: that._map, mapEvent: evt});
                 }, false);
                 // TODO: Implement missing events from http://developer.here.com/javascript-apis/documentation/maps/topics_api_pub/nokia.maps.map.Display.html
             });
-        } else {  // after subsequent rerenderings, the map needs to get the current values set
-            this._map.setCenter(new nokia.maps.geo.Coordinate(this.getLatitude(),this.getLongitude()));
-            this._map.setZoomLevel(this.getZoomLevel());
-        }
+//        } else {  // after subsequent rerenderings, the map needs to get the current values set
+//            this._map.setCenter(new nokia.maps.geo.Coordinate(this.getLatitude(),this.getLongitude()));
+//            this._map.setZoomLevel(this.getZoomLevel());
+//        }
     },
     addClusteredData: function(){ return this._map.addClusteredData.apply(this._map,arguments)}
 });
@@ -65,7 +100,7 @@ sap.ui.core.Control.extend(heremap_ns, {
         nokia.Settings.set('app_code', settings.appCode);
 
         // Use staging environment (remove the line for production environment)
-        nokia.Settings.set('serviceMode', 'cit');
+        //nokia.Settings.set('serviceMode', 'cit');
         // The language of the map can be changed here.
         nokia.Settings.set('defaultLanguage', settings.language);
     }
@@ -188,18 +223,10 @@ sap.ui.core.Control.extend(heremap_ns, {
                                 }
                             );
                         }else{
-                            marker = /*!!dataPoint.count
-                             ?*/ new nokia.maps.map.StandardMarker(
-                                //new nokia.maps.geo.Coordinate(40.738728,-73.99236)
+                            marker = new nokia.maps.map.StandardMarker(
                                 [dataPoint.latitude, dataPoint.longitude]
-                            )
-                                /*: new nokia.maps.map.Marker([dataPoint.latitude, dataPoint.longitude],
-                                 {
-                                 icon: createIcon(dataPoint.count),
-                                 anchor: new nokia.maps.util.Point(25, 25)
+                            );
                                  }
-                                 )*/;
-                        }
                         marker.data = dataPoint;
                         dataPoint.mapMarkers = dataPoint.mapMarkers || [];
                         dataPoint.mapMarkers.push(marker);
