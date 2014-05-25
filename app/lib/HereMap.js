@@ -223,17 +223,9 @@ sap.ui.core.Control.extend(heremap_ns, {
                                 }
                             );
                         }else{
-                            marker = /*!!dataPoint.count
-                             ?*/ new nokia.maps.map.StandardMarker(
-                                //new nokia.maps.geo.Coordinate(40.738728,-73.99236)
+                            marker = new nokia.maps.map.StandardMarker(
                                 [dataPoint.latitude, dataPoint.longitude]
-                            )
-                                /*: new nokia.maps.map.Marker([dataPoint.latitude, dataPoint.longitude],
-                                 {
-                                 icon: createIcon(dataPoint.count),
-                                 anchor: new nokia.maps.util.Point(25, 25)
-                                 }
-                                 )*/;
+                            );
                         }
                         marker.data = dataPoint;
                         dataPoint.mapMarkers = dataPoint.mapMarkers || [];
