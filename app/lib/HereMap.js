@@ -267,8 +267,8 @@ sap.ui.core.Control.extend(heremap_ns, {
             // sign in and register on http://developer.here.com
             // and obtain your own developer's API key
             AppIdAndToken :{
-                appId: 'DemoAppId01082013GAL',
-                appCode: 'AJKnXv84fjrb0KIHawS0Tg',
+                appId: 'ArdveUmqksehK7HLq6su',
+                appCode: 'j-8OuRQ0uAq49hA161vEIA',
                 language: 'en-US',
                 serviceMode: 'cit'
             },
