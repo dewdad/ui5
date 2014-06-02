@@ -111,7 +111,7 @@ $.sap.declare('mui');
             
             return (oView.updateView && viewData && oView.updateView(viewData)) || oView;
         },
-        getBindingProperty: function(src){
+        getModelData: function(src){
             src.getModel().getProperty(src.getBindingContext().getPath());
         }
 
