@@ -112,7 +112,7 @@ $.sap.declare('mui');
             return (oView.updateView && viewData && oView.updateView(viewData)) || oView;
         },
         getModelData: function(src){
-            src.getModel().getProperty(src.getBindingContext().getPath());
+            return src.getModel().getProperty(src.getBindingContext().getPath());
         }
 
     };
