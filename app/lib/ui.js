@@ -85,7 +85,7 @@ $.sap.declare('mui');
             // TODO: override sap.ui.registerLocalModule to assume view loading root
 
             if(strArg){
-                viewObj.id = viewObj.viewName.replace(/\./g,'_');
+                viewObj.id = viewObj.viewName;// viewObj.viewName.replace(/\./g,'_');
             }
 
             if(!!viewObj.id){
@@ -113,6 +113,13 @@ $.sap.declare('mui');
         },
         getModelData: function(src){
             return src.getModel().getProperty(src.getBindingContext().getPath());
+        },
+        getRootResourceName: function(){
+            var ret = undefined;
+            try {
+                ret = Object.keys($("#sap-ui-bootstrap").data().sapUiResourceroots)[0];
+            }catch(e){}
+            return ret;
         }
 
     };
