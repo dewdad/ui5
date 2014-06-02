@@ -110,6 +110,9 @@ $.sap.declare('mui');
             if(!!err && !oView) throw err;
             
             return (oView.updateView && viewData && oView.updateView(viewData)) || oView;
+        },
+        getBindingProperty: function(src){
+            src.getModel().getProperty(src.getBindingContext().getPath());
         }
 
     };
