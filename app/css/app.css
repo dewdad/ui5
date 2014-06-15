@@ -5,3 +5,6 @@
 .sapMSLI .sapMLIBImgNav{
 	flex:none;
 }
+.navContainerControl.sapMNav{
+    position: absolute;
+}

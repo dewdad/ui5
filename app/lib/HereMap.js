@@ -187,7 +187,7 @@ sap.ui.core.Control.extend(heremap_ns, {
                             var compositePointsSum=0, compositePointsCount=0;
 
                             for(var i=0; i<dataPointsSize; i++){
-                                var currDataPoint = dataPoints.Cb[i];
+                                var currDataPoint = dataPoints.getPoints[i];
                                 if(!!currDataPoint.count){
                                     compositePointsCount++;
                                     compositePointsSum += currDataPoint.count;

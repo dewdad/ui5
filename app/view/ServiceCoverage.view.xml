@@ -64,12 +64,12 @@
                     </HBox>
                     <NavContainer
                       id="CoverageContainer"
-                      height="600px"
+                      height="100%"
                       class="navContainerControl">
                     <mvc:XMLView
-                            height="100%"
-                            id="CoverageMap"
-                            viewName="app.view.CoverageMap">
+                        height="100%"
+                        id="CoverageMap"
+                        viewName="app.view.CoverageMap">
                     </mvc:XMLView>
                       <mvc:XMLView
                         id="CoverageReport"
