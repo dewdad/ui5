@@ -64,7 +64,7 @@
                     </HBox>
                     <NavContainer
                       id="CoverageContainer"
-                      height="100%"
+                      height="600px"
                       class="navContainerControl">
                     <mvc:XMLView
                         height="100%"
