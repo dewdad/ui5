@@ -1,4 +1,4 @@
-$.sap.require('app.lib.ui')
+//$.sap.require('app.lib.ui5')
 
 /**
  * Controller. Handles all events of the view.
