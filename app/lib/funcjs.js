@@ -23,11 +23,17 @@ Array.prototype.min = function() {
     return min;
 };
 
-declareName = function(name){
-    return name.split('.').reduce(function(holder, name){
-        holder[name] = holder[name] || {};
-        return holder[name];
-    }, window);
+/**
+ * defines a property path in the form of 'p1.p1-1.p1-1-2'
+ * if not defined in the context (optional, defaults to window).
+ * @return value of path within context
+ */
+var declareName, propertyGetSet;
+declareName = propertyGetSet = function(sPath, oContext, cDelimeter){
+    return sPath.split(cDelimeter || '.').reduce(function(holder, sPath){
+        holder[sPath] = holder[sPath] || {};
+        return holder[sPath];
+    }, oContext || window);
 };
 
 function setLocationHash(hash){
@@ -94,7 +100,7 @@ function trim (str) {
  * @param delimiter
  * @returns {*}
  */
-function setToValue(obj, value, path, delimiter) {
+function setProperty(obj, value, path, delimiter) {
     if(!!!arguments[2]){
         obj = value;
         return obj;
@@ -424,6 +430,18 @@ function indexOfKeyValue(array,key,value){
             return i;
     }
     return -1;
+}
+
+//  discuss at: http://phpjs.org/functions/dirname/
+//   example 1: dirname('/etc/passwd');
+//   returns 1: '/etc'
+//   example 2: dirname('c:/Temp/x');
+//   returns 2: 'c:/Temp'
+//   example 3: dirname('/dir/test/');
+//   returns 3: '/dir'
+var parentPath, dirname;
+parentPath = dirname = function(){
+    return path.replace(/\\/g, '/').replace(/\/[^\/]*\/?$/, '');
 }
 
 function sort (prop, arr) {

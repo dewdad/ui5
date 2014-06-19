@@ -44,7 +44,8 @@ sap.ui.model.json.JSONModel.extend("sap.uiext.model.json.JSONModel", {
             args = [sPath, oValue];
         //}
 
-        // TODO: Create path if it does not exist
+        // Create path if it does not exist
+        propertyGetSet(sPath, parentPath(this.oData));
 
         if(this.getProperty(sPath, oContext)!==oValue){ // TODO: a fix for combo update bindings introduced with SAPUI 1.6
             ret = sap.ui.model.json.JSONModel.prototype.setProperty.apply(this, args);
