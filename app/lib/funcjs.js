@@ -440,8 +440,8 @@ function indexOfKeyValue(array,key,value){
 //   example 3: dirname('/dir/test/');
 //   returns 3: '/dir'
 var parentPath, dirname;
-parentPath = dirname = function(){
-    return path.replace(/\\/g, '/').replace(/\/[^\/]*\/?$/, '');
+parentPath = dirname = function(sPath){
+    return sPath.replace(/\\/g, '/').replace(/\/[^\/]*\/?$/, '');
 }
 
 function sort (prop, arr) {
