@@ -30,7 +30,9 @@ Array.prototype.min = function() {
  */
 var declareName, propertyGetSet;
 declareName = propertyGetSet = function(sPath, oContext, cDelimeter){
-    return sPath.split(cDelimeter || '.').reduce(function(holder, sPath){
+    cDelimeter = cDelimeter || '.';
+    if(sPath.charAt(0)===cDelimeter) sPath = sPath.substr(1);
+    return sPath.split(cDelimeter).reduce(function(holder, sPath){
         holder[sPath] = holder[sPath] || {};
         return holder[sPath];
     }, oContext || window);

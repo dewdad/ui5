@@ -8,7 +8,7 @@ sap.ui.model.json.JSONModel.extend("sap.uiext.model.json.JSONModel", {
                     // TODO?: make inner loop to display messages for elements
                     messages.push(this.validation_errors[errElem].messages[0]);
                 }
-                sui.input_validation.alert(messages);
+                if(!!sui) sui.input_validation.alert(messages);
             }
             return false;
         }
@@ -45,24 +45,24 @@ sap.ui.model.json.JSONModel.extend("sap.uiext.model.json.JSONModel", {
         //}
 
         // Create path if it does not exist
-        propertyGetSet(sPath, parentPath(this.oData));
+        propertyGetSet(parentPath(sPath), this.oData, '/');
 
         if(this.getProperty(sPath, oContext)!==oValue){ // TODO: a fix for combo update bindings introduced with SAPUI 1.6
             ret = sap.ui.model.json.JSONModel.prototype.setProperty.apply(this, args);
         }
 
-        if(!!oContext){
-            // TODO: migrate from string to object context from  SAPUI 1.4-1.6
-            var contextPath = sui.getBindingStr(oContext);
-        }
-        if(!contextPath){
-            var sPathParts = sPath.split('/');
-            var partsLen = sPathParts.length;
-            contextPath = (sPathParts.slice(0, partsLen-1)).join('/');
-            sPath = (sPathParts.slice(partsLen-1,partsLen))[0];
-        }
+//        if(!!oContext){
+//            // TODO: migrate from string to object context from  SAPUI 1.4-1.6
+//            var contextPath = sui.getBindingStr(oContext);
+//        }
+//        if(!contextPath){
+//            var sPathParts = sPath.split('/');
+//            var partsLen = sPathParts.length;
+//            contextPath = (sPathParts.slice(0, partsLen-1)).join('/');
+//            sPath = (sPathParts.slice(partsLen-1,partsLen))[0];
+//        }
 
-        this.fireEvent('propertyChange', {sPath:sPath, oValue:oValue, oContext:oContext, sContext:contextPath, bindPath:!!contextPath? contextPath+'/'+sPath: sPath});
+        this.fireEvent('propertyChange', {sPath:sPath, oValue:oValue, /*oContext:oContext, sContext:contextPath,*/ bindPath:/*!!contextPath? contextPath+'/'+sPath:*/ sPath});
         return ret;
     },
     /**
@@ -73,7 +73,7 @@ sap.ui.model.json.JSONModel.extend("sap.uiext.model.json.JSONModel", {
      */
     getProperty: function(sPath, oContext){
         var args = arguments;
-        sPath = sui.getBindingStr(sPath); // fix to string if context object
+        sPath = !!sPath.getPath? sPath.getPath(): sPath; // fix to string if context object
         if(!!oContext && typeof(oContext) == 'string'){
             sPath = oContext+'/'+sPath;
             args = [sPath];
