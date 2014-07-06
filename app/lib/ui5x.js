@@ -1,3 +1,54 @@
+console.log("ui5x.js is loaded");
+
+$.sap.require('sap.ui.model.odata.ODataListBinding');
+
+sap.ui.model.odata.ODataListBinding.prototype.x_search = function(aFields, sQuery){
+    if(!sap.ui.model.odata.ODataListBinding.prototype.x_searchSupport){
+        (function(filter){
+            sap.ui.model.odata.ODataListBinding.prototype.filter = function(aFilters){
+              if(!!this.x_searchFilter){
+                  aFilters.push(this.x_searchFilter);
+              }
+              return filter.apply(this, arguments);
+            };
+        })(sap.ui.model.odata.ODataListBinding.prototype.filter);
+
+        (function() {
+                var proxied = window.XMLHttpRequest.prototype.open;
+                debugger;
+                window.XMLHttpRequest.prototype.open = function() {
+                    if(arguments[1].search(/__/mg)>-1){
+                        var matches = /__(.*?)__%20eq%20'?([a-z,A-Z,0-9, ,-,]+)'?/mgi.exec(arguments[1]);
+
+                        // TODO: make sure there are fields listed in the special search filter
+                        var filterColumns = $.map(matches[1].split('/'), function(v){
+                            return "substringof('"+matches[2]+"',"+v+")";
+                        });
+
+                        var searchFilterStr = "("+filterColumns.join(" or ")+")";
+
+                        arguments[1] = arguments[1].replace(matches[0], searchFilterStr);
+                    }
+                    return proxied.apply(this, [].slice.call(arguments));
+                };
+            })();
+            sap.ui.model.odata.ODataListBinding.prototype.x_searchSupport = true;
+    }
+
+    var aFilters = this.aFilters;
+    var aSorters = this.aSorters;
+    
+    // clear out the search filter
+    aFilters = $.grep(aFilters, function(v){ if (v.sPath.search(/__/)<0) return true; });
+    this.x_searchFilter= null;
+
+    if(!!sQuery){ // add the special search filter to be serialized on xhr open
+        this.x_searchFilter = new sap.ui.model.Filter('__'+aFields.join('/')+'__', 'EQ', sQuery);
+    }
+    
+    this.sort(aSorters).filter(aFilters);
+};
+
 sap.ui.model.json.JSONModel.extend("sap.uiext.model.json.JSONModel", {
 
     validateInput: function(notify){
