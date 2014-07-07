@@ -2,8 +2,19 @@ console.log("ui5x.js is loaded");
 
 $.sap.require('sap.ui.model.odata.ODataListBinding');
 
+
+
+/**
+ * Adds support to the ODataListBinding type to search on OData service endpoints.
+ * it does so by building a specialized filter that is later extracted before XHR open and replaced
+ * with a valid logical contains statement chained by "or" operator. It saves
+ * @param aFields   An array of strings corresponding to the service entity fields to be included in the search
+ * @param sQuery    The search term
+ */
 sap.ui.model.odata.ODataListBinding.prototype.x_search = function(aFields, sQuery){
+    // Add support for search ONCE
     if(!sap.ui.model.odata.ODataListBinding.prototype.x_searchSupport){
+        // Overriding filter on oBinding to check for the search filter before issuing a filter on the binding
         (function(filter){
             sap.ui.model.odata.ODataListBinding.prototype.filter = function(aFilters){
               if(!!this.x_searchFilter){
@@ -13,26 +24,26 @@ sap.ui.model.odata.ODataListBinding.prototype.x_search = function(aFields, sQuer
             };
         })(sap.ui.model.odata.ODataListBinding.prototype.filter);
 
+        // Augmenting XHR open to serialize the special search filter from the binding's filter string
         (function() {
-                var proxied = window.XMLHttpRequest.prototype.open;
-                debugger;
-                window.XMLHttpRequest.prototype.open = function() {
-                    if(arguments[1].search(/__/mg)>-1){
-                        var matches = /__(.*?)__%20eq%20'?([a-z,A-Z,0-9, ,-,]+)'?/mgi.exec(arguments[1]);
+            var proxied = window.XMLHttpRequest.prototype.open;
+            window.XMLHttpRequest.prototype.open = function() {
+                if(arguments[1].search(/__SEARCHFILTER__/mg)>-1){
+                    var matches = /__SEARCHFILTER__(.*?)__SEARCHFILTER__%20eq%20'?([a-z,A-Z,0-9, ,-,]+)'?/mgi.exec(arguments[1]);
 
-                        // TODO: make sure there are fields listed in the special search filter
-                        var filterColumns = $.map(matches[1].split('/'), function(v){
-                            return "substringof('"+matches[2]+"',"+v+")";
-                        });
+                    // TODO: make sure there are fields listed in the special search filter
+                    var filterColumns = $.map(matches[1].split('/'), function(v){
+                        return "substringof('"+matches[2]+"',"+v+")";
+                    });
 
-                        var searchFilterStr = "("+filterColumns.join(" or ")+")";
+                    var searchFilterStr = "("+filterColumns.join(" or ")+")";
 
-                        arguments[1] = arguments[1].replace(matches[0], searchFilterStr);
-                    }
-                    return proxied.apply(this, [].slice.call(arguments));
-                };
-            })();
-            sap.ui.model.odata.ODataListBinding.prototype.x_searchSupport = true;
+                    arguments[1] = arguments[1].replace(matches[0], searchFilterStr);
+                }
+                return proxied.apply(this, [].slice.call(arguments));
+            };
+        })();
+        sap.ui.model.odata.ODataListBinding.prototype.x_searchSupport = true;
     }
 
     var aFilters = this.aFilters;
@@ -43,7 +54,7 @@ sap.ui.model.odata.ODataListBinding.prototype.x_search = function(aFields, sQuer
     this.x_searchFilter= null;
 
     if(!!sQuery){ // add the special search filter to be serialized on xhr open
-        this.x_searchFilter = new sap.ui.model.Filter('__'+aFields.join('/')+'__', 'EQ', sQuery);
+        this.x_searchFilter = new sap.ui.model.Filter('__SEARCHFILTER__'+aFields.join('/')+'__SEARCHFILTER__', 'EQ', sQuery);
     }
     
     this.sort(aSorters).filter(aFilters);
