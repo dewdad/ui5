@@ -47,7 +47,7 @@ sap.ui.controller("app.view.CoverageMap" , {
     onMapReady: function(evt) {
 		console.log('map is ready');
         var map = evt.oSource;
-        $.getJSON('model/counterpois.json', $.proxy(map.addClusteredData, map));
+        $.getJSON('model/counterpois.json', function(data){poiData = data; map.addClusteredData(data);});
         // load clustering before requesting the cluster feature //TODO: add clustering (datarendering) feature on request to ui5 map control addClusteredData
         /*nokia.Features.load(
             nokia.Features.getFeaturesFromMatrix(['maps','datarendering']),
@@ -55,6 +55,22 @@ sap.ui.controller("app.view.CoverageMap" , {
             null,
             false
         );*/
+    },
+    onMarkerPress: function(evt){
+        console.log("HereMap markerPress", evt.getParameters());
+    },
+    onMarkerHover: function(evt){
+        console.log("HereMap markerHover", evt.getParameters());
+        var data = evt.getParameters().data;
+        var htmlStr = '<div>' +
+            '<h2>'+(data.text || "A Cluster")+'</h2>' +
+            '<img width=120 height=90 src=' +
+            '"http://developer.here.com/apiexplorer/examples/res/120px-Bodemuseum.jpg" ' +
+            'alt=""/><br/><b>'+(data.id || '')+'</b>' +
+            '<p><a href="' +
+            'http://en.wikipedia.org/wiki/Museum_Island" target="_blank">' +
+            'Check out info and photos on Wikipedia</a></p></div>'
+		evt.oSource.openBubble(htmlStr, evt);
     }
 	
 });

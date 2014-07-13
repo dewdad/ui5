@@ -63,7 +63,7 @@ sap.ui.model.odata.ODataListBinding.prototype.x_search = function(aFields, sQuer
 sap.ui.model.json.JSONModel.extend("sap.uiext.model.json.JSONModel", {
 
     validateInput: function(notify){
-        if(!isEmpty(getFromObjPath(this, 'validation_errors'))){
+        if(!isEmpty(getObjProperty(this, 'validation_errors'))){
             if(!!notify){
                 var messages = [];
                 for(var errElem in this.validation_errors){
@@ -172,7 +172,7 @@ sap.ui.model.json.JSONModel.extend("sap.uiext.model.json.JSONModel", {
 
     },
     removeFrom: function(sPath){
-        delFromObjPath(this.getData(),sPath,'/');
+        removeObjProperty(this.getData(),sPath,'/');
         this.checkUpdate();
         var delPathArr = sPath.split('/');
         var changedPath = delPathArr.slice(0,delPathArr.length-1).join('/');

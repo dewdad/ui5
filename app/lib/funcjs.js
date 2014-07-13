@@ -24,6 +24,16 @@ declareName = propertyGetSet = function(sPath, oContext, cDelimeter){
     }, oContext || window);
 };
 
+// JavaScript inheritance helper function
+function extend(extension, parent) {
+    function I() {};
+    I.prototype = parent.prototype;
+    extension.prototype = new I;
+    extension.prototype.constructor = extension;
+    extension.superprototype = parent.prototype;
+    return extension;
+};
+
 function setLocationHash(hash){
     hash = hash.replace( /^#/, '' );
     var fx, node = $( '#' + hash );
@@ -164,13 +174,12 @@ function getObjProperty(obj, path, delimiter){
     for (var i = 0, parts = path.length -1 ; i < parts ; i += 1) {
         if(path[i].length>0){
             //console.log(parent);
-            parent = parent[path[i]];
+            parent = !!parent[path[i]].call? parent[path[i]](): parent[path[i]];
             if(typeof(parent)=='undefined') return undefined;
         }
     }
     return parent[path[path.length-1]];
 }
-function getFromObjPath(obj, path, delimiter){ return getObjProperty.apply(this, arguments);} //alias for getObjProperty
 
 function createUUID() {
     // http://www.ietf.org/rfc/rfc4122.txt
@@ -240,7 +249,7 @@ function clone(src) {
 
 }
 
-function delFromObjPath(obj, path, delimiter){
+function removeObjProperty(obj, path, delimiter){
     if(!!!arguments[1])
         return false;
 
@@ -262,6 +271,14 @@ function delFromObjPath(obj, path, delimiter){
         try{
             delete parent[path[path.length-1]];
         }catch(ex){}
+    }
+    return obj;
+}
+
+function keysArrayToObj(aKeys, defaultValue){
+    var obj={};
+    for(var i= 0, len = aKeys.length; i<len; i++){
+        obj[aKeys[i]] = defaultValue;
     }
     return obj;
 }
@@ -705,6 +722,10 @@ var DateFunctions={
         }
     }
 };
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 
 //***************** Polyfills *******************//
 

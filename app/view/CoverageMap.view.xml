@@ -2,6 +2,6 @@
     xmlns="sap.ui.core.mvc"
     xmlns:lib="app.lib">
 
-    <lib:HereMap displayReady="onMapReady"></lib:HereMap>
+    <lib:HereMap  displaySearch="true" displayReady="onMapReady" markerPress="onMarkerPress" markerHover="onMarkerHover" displayComponents="ZoomBar,Behavior,InfoBubbles" counterFields="counterField"></lib:HereMap>
 
 </View>
