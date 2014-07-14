@@ -145,7 +145,9 @@ sap.ui.core.Control.extend(heremap_ns, {
             // TODO: Implement missing events from http://developer.here.com/javascript-apis/documentation/maps/topics_api_pub/nokia.maps.map.Display.html
         });
     },
-    addClusteredData: function(){ return this._map.addClusteredData.apply(this,arguments)},
+    addClusteredData: function(aData, oSvg){
+        return this._map.addClusteredData(aData,oSvg,this);
+    },
     openBubble: function(sDescription, oCoordinate){
         if(isEmpty(oCoordinate)) return false;
         oCoordinate = oCoordinate.longitude
@@ -215,11 +217,11 @@ sap.ui.core.Control.extend(heremap_ns, {
              * @param aDataPoints
              * @param oSvg An object like {icon: [svg], color}
              */
-            nokia.maps.map.Display.prototype.addClusteredData = function(aDataPoints,oSvg){
-                var that = this;
-                var clusterCounterField = this.getClusterCounterField();
-                var map = this._map, svgParser = new nokia.maps.gfx.SvgParser();
-                var svg={}, removedFromMap = [], insertCounters = [];
+            nokia.maps.map.Display.prototype.addClusteredData = function(aDataPoints,oSvg, ui5){
+                var clusterCounterField = ui5.getClusterCounterField();
+                var counterFields = ui5.getCounterFields();
+                var map = this, svgParser = new nokia.maps.gfx.SvgParser();
+                var svg={};
                 svg.icon = (oSvg && oSvg.icon) || ['<svg width=\'51\' height=\'51\' xmlns=\'http://www.w3.org/2000/svg\'>' +
                     '<circle stroke=\'#FFF\' fill=\'__MAINCOLOR__\' cx=\'25\' cy=\'25\' r=\'25\' stroke-width=\'2\'/>' +
                     '<circle stroke=\'#FFF\' fill=\'__MAINCOLOR__\' cx=\'25\' cy=\'25\' r=\'21\' stroke-width=\'2\'/>' +
@@ -257,13 +259,13 @@ sap.ui.core.Control.extend(heremap_ns, {
                     marker.addListener(
                         HereMaps.CLICK,
                         function (evt) {
-                            that.fireMarkerPress({hereEvt: evt, data: data});
+                            ui5.fireMarkerPress({hereEvt: evt, data: data});
                         }
                     );
                     marker.addListener(
                         'mouseover',
                         function (evt) {
-                            that.fireMarkerHover({hereEvt: evt, data: data});
+                            ui5.fireMarkerHover({hereEvt: evt, data: data});
                         }
                     );
                 }
@@ -273,7 +275,6 @@ sap.ui.core.Control.extend(heremap_ns, {
                     // Add a SVG Marker for Clusters.
                     getClusterPresentation : function (dataPoints) {
                         var counters = {};//keysArrayToObj(that.getCounterFields(), 0);
-                        var counterFields = that.getCounterFields();
                         dataPointsSize = dataPoints.getSize();
                         if (dataPointsSize > 0) {
                             var compositePointsSum=0, compositePointsCount=0;
@@ -310,7 +311,6 @@ sap.ui.core.Control.extend(heremap_ns, {
                     getNoisePresentation : function (dataPoint) {
                         var marker;
                         var counters = {};
-                        var counterFields = that.getCounterFields();
 
                         for(var j=0, len=counterFields.length; j<len; j++){
                             var key = counterFields[j];
