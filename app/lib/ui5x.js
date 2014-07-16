@@ -1,8 +1,265 @@
 console.log("ui5x.js is loaded");
+jQuery.sap.require("sap.ui.core.Element");
+jQuery.sap.require("sap.ui.model.Model");
+
+/**!!!           Element            !!!**/
+// Need to consult with SAPUI5 on how to make this sound with multi-bound elements, or multiple aggregations
+sap.ui.core.Element.prototype.setPropertyFire = function(sPropertyName, oValue, bSuppressInvalidate){
+    var toReturn = this.setPropertyFire(sPropertyName, oValue, bSuppressInvalidate);
+    this.fireChange();
+};
+sap.ui.core.Element.prototype.x_AddUpdateRow = function(oData,sRowBindingPath, sIdProperty){
+    var model = this.getModel();
+    sIdProperty = sIdProperty || 'id';
+
+    if(!!model){
+        // If the RowBindingPath was not pass then extract from element binding info
+        sRowBindingPath = sRowBindingPath || this.x_GetRowsBindingPath();
+        return model.x_AddUpdateRow(oData, sRowBindingPath);
+    }else{
+        jQuery.sap.log.error('Element must have a model to execute function "x_AddUpdateRow"');
+    }
+};
+
+if(!!sap.ui.commons.TriStateCheckBox){
+    /**
+     * takes a bound view and model paths to checklist and checked property. It can infer the latter 2 arguments if you pass in
+     * the view who's aggregate binding contains a checkbox template
+     * @param args {sap.ui.control boundView, string checkListPath, string checkedPath}
+     */
+    sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList = function(args){
+        var triStateCbox = this;
+        if(!args || !args.boundView){
+            jQuery.sap.log.error('illegal call to sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList');
+            return;
+        }
+        if(!args.checkListPath){ // try to infer the check list path from the aggregation binding path
+            var defaultAggr = args.boundView.x_GetRecordsAggregation();
+            if(!defaultAggr){
+                jQuery.sap.log.error('call to sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList cannot infer checklist path');
+                return;
+            }
+            var aggrBindingInfo = args.boundView.getBindingInfo(defaultAggr);
+            if(!aggrBindingInfo || !aggrBindingInfo.path){
+                jQuery.sap.log.error('call to sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList cannot infer checklist path');
+                return;
+            }
+            args.checkListPath =aggrBindingInfo.path;
+        }
+        if(!args.checkedPath){ // try to infer the checked path from the binding template
+            var oAggrTemplate = aggrBindingInfo.template;
+            if(!oAggrTemplate || oAggrTemplate.getMetadata()._sClassName!=='sap.ui.commons.CheckBox'){
+                jQuery.sap.log.error('call to sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList was made with a view having no aggregate binding template or one that is not a checkbox');
+                return;
+            }
+            var cBoxBindingInfo =oAggrTemplate.getBindingInfo('checked');
+            if(!cBoxBindingInfo || !cBoxBindingInfo.path){
+                jQuery.sap.log.error('call to sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList cannot infer checked path for checklist items');
+                return;
+            }
+            args.checkedPath = cBoxBindingInfo.path;
+        }
+
+        //** onAfterRendering recheck list state and update the tristate parent **//
+//        var checkListState = function(){
+//
+//        };
+//        if(addEventDelegate)
+        //this.addDelegate();
+
+        oAggrTemplate.attachChange(function(){
+                var isChecked = this.getChecked();
+                if(isChecked){
+                    this.toggle("Unchecked");
+                }
+                else if(nSelectedChildren === allChildren.length){
+                    this.toggle("Checked");
+                }
+                else{
+                    this.toggle("Mixed");
+                }
+            }
+        );
+        this.attachChange(function(){
+            if (this.getSelectionState() === "Checked"){
+                for (var i = 0; i < allChildren.length; i++) {
+                    allChildren[i].setChecked(true);
+                    nSelectedChildren = allChildren.length;
+                }
+            }
+            else {
+                for (var i = 0; i < allChildren.length; i++) {
+                    allChildren[i].setChecked(false);
+                    nSelectedChildren = 0;
+                }
+            }
+        });
+    };
+}
+
+sap.ui.core.Element.prototype.x_SetData = function(oData,sPath, sModelName){
+    var model = this.x_GetSetModel(sModelName);
+    if(!!model){
+        return model.x_SetData(oData, sPath || '');
+    }else{
+        jQuery.sap.log.error('Element must have a model to execute function "x_AddUpdateRow"');
+    }
+};
+
+sap.ui.core.Element.prototype.x_GetSetModel  = function(modelName){
+    if(!this.getModel(modelName)){
+        var jsmodel = new sap.uiext.model.json.JSONModel();
+        this.setModel(jsmodel, modelName);
+    }
+    return this.getModel();
+};
+
+sap.ui.core.Element.prototype.x_SetJSModel  = function(oData){
+    var jsmodel = new sap.uiext.model.json.JSONModel(oData);
+    jsmodel.setSizeLimit(500);
+    this.setModel(jsmodel);
+    return this;
+};
+
+sap.ui.core.Element.prototype.x_IfNotSetModel = function(oModel){
+    if(!this.hasModel()) this.setModel(oModel);
+};
+
+/**
+ * Takes a string path or Context object and deletes the branch by the given path in the element's model
+ * @param {string | Context} context
+ */
+sap.ui.core.Element.prototype.x_ModelDeleteRow = function(context){
+    context = sui.getBindingStr(context);
+    if(isEmpty(context)){
+        jQuery.sap.log.debug('A context argument must be passed for x_ModelDeleteRow to operate');
+        return;
+    }
+    if(!!this.getModel().removeFrom)
+        this.getModel().removeFrom(context);
+};
+
+sap.ui.core.Element.prototype.x_GetModelRows = function(){
+    if(this.hasModel()){
+        var rowsBindPath =  this.x_GetRowsBindingPath(),
+
+            aggrObj = getFromObjPath(this.getModel().getData(), rowsBindPath, '/');
+        if(isEmpty(aggrObj)) {
+            var newArr = new Array();
+            setToValue(this.getModel().getData(), newArr,rowsBindPath, '/');
+            return newArr;
+        }
+        return aggrObj;
+    }
+    jQuery.sap.log.debug("Element must have model to use method x_GetModelRows");
+    return false;
+};
+
+sap.ui.core.Element.prototype.x_GetModelRowByIndex = function(i){
+    return this.x_GetModelRows()[i];
+};
+
+sap.ui.core.Element.prototype.x_BindAggregation = function(aggrgationName, sPath, oTemplate, oSorter, aFilters){
+    var defaultAggr = aggrgationName ||this.x_GetRecordsAggregation();
+    var path = sPath || ''; //sPath[0]!='/' && !this.getBindingContext()? '/'+sPath: sPath
+    var bTemplate = oTemplate || this.x_GetBindingTemplate();
+//	var bindInfo = {
+//			path: sPath[0]!='/' && !this.getBindingContext()? '/'+sPath: sPath,
+//					template: oTemplate || this.x_GetBindingTemplate()
+//		};
+    if(!!defaultAggr && !!bTemplate){
+        this.bindAggregation(defaultAggr, path, bTemplate, oSorter, aFilters);
+    }
+};
+
+sap.ui.core.Element.prototype.x_BindRecordsAggregation = function(sPath, oTemplate, oSorter, aFilters){
+    var defaultAggr = this.x_GetRecordsAggregation();
+    if(!!defaultAggr){
+        this.x_BindAggregation(defaultAggr, sPath, oTemplate, oSorter, aFilters);
+    }
+};
+
+sap.ui.core.Element.prototype.x_GetRecordsAggregation = function(){
+    if(!!this.getRows)
+        return "rows";
+    else if(!!this.getItems)
+        return "items";
+    else if(!!this.getContent){
+        return "content";
+    }
+    else{
+        jQuery.sap.log.debug('The element has no records binding aggregation.');
+        return null;
+    }
+};
+
+sap.ui.core.Element.prototype.x_GetRecordsBindingPath = function(){
+    return this.getBindingPath(this.x_GetRecordsAggregation());
+};
+
+sap.ui.core.Element.prototype.getBindingSizeLimit = function(){
+    // defaulted to one hundred as suggested by SAPUI5 team due to that being the default value
+    // for the library's elements
+    return this.getModel() && this.getModel().iSizeLimit || 100;
+};
+
+sap.ui.core.Element.prototype.x_isRecordBound = function(){
+    return !isEmpty(this.getBindingPath(this.x_GetRecordsAggregation()));
+};
+
+sap.ui.core.Element.prototype.x_GetModelLastRow = function(){
+    var mRows = this.x_GetModelRows(), mLastIndex = mRows.length-1;
+    return mRows[mLastIndex];
+};
+
+sap.ui.core.Element.prototype.x_GetAggregatingParent = function(){
+    var parent = this;
+    while(parent !== this.getUIArea()){
+        if(!isEmpty(parent.getBindingPath('rows')))
+            return parent;
+        parent = parent.getParent()
+    }
+    return false;
+};
+
+sap.ui.core.Element.prototype.x_GetRowsBindingPath = function(){
+    var aggrParent = this.x_GetAggregatingParent(), bContext = aggrParent.getBindingContext(),
+        rBPath = aggrParent.getBindingPath('rows'), patt = new RegExp(bContext);
+
+    if(!!bContext && !patt.test(rBPath))
+        return [bContext, rBPath].join('/');
+
+    return rBPath;
+};
+
+sap.ui.core.Element.prototype.x_GetBindingTemplate = function(aggr){
+    var aggr = aggr || this.x_GetRecordsAggregation();
+    return getFromObjPath(this, 'mBindingInfos.'+aggr+'.template');
+};
+
+sap.ui.core.Element.prototype.x_SetBindingTemplate = function(oTemplate, aggregationName){
+    var aggregationName = aggregationName || this.x_GetRecordsAggregation();
+    //if(!!getObjProperty(this, 'mBindingInfos.'+aggregationName))
+    //setToValue(this, oTemplate, 'mBindingInfos.'+aggregationName+'.template');
+    //this.x_BindingTemplate = oTemplate
+    this.x_BindAggregation(aggregationName, null, oTemplate);
+};
+
+sap.ui.core.Element.prototype.x_GetLabel = function(){
+    return $('label[for='+this.getId()+']');
+};
+
+/**
+ * returns the label text for this input
+ * @return {string}
+ */
+sap.ui.core.Element.prototype.x_GetLabelText = function(){
+    return this.x_GetLabel().text().replace(/^[\s:]+|[\s:]+$/g,''); // trim and "user:" becomes "user"
+};
+
+/**!!!           End Element            !!!**/
 
 $.sap.require('sap.ui.model.odata.ODataListBinding');
-
-
 
 /**
  * Adds support to the ODataListBinding type to search on OData service endpoints.
@@ -60,6 +317,54 @@ sap.ui.model.odata.ODataListBinding.prototype.x_search = function(aFields, sQuer
     this.sort(aSorters).filter(aFilters);
 };
 
+/**!!!          JSON Model              !!!**/
+
+/**
+ *
+ * @param oData the data object to write to the model
+ * @param sRowsBindPath the row binding path from the requesting UI element
+ * @param sIdProperty the identifying property of the oData object
+ * @return {int} number of rows in the row binding path
+ */
+sap.ui.model.Model.prototype.x_AddUpdateRow = function(oData, sRowsBindPath, sIdProperty){
+    sIdProperty = sIdProperty || 'id';
+
+    if(!sRowsBindPath){
+        jQuery.sap.log.error('An sPath or sRowBindPath must be provided to model.x_AddUpdateRow"');
+        return -1;
+    }
+    var modelRows = this.getProperty(sRowsBindPath), modelRowsLen;
+
+    if(!modelRows){
+        var mData={};
+        setToValue(mData,[oData],sRowsBindPath, '/');
+        this.setData(mData);
+        modelRows = this.getProperty(sRowsBindPath);
+    }
+
+    modelRowsLen = modelRows.length;
+
+    var objIndex = !!oData[sIdProperty]? indexOfKeyValue(modelRows, sIdProperty, oData[sIdProperty]): -1;
+    //  if objIndex>-1 oData was found and this is an add operation, otherwise it is an update operation
+    var sPath = sRowsBindPath + '/' + (objIndex>-1? objIndex: modelRowsLen);
+    this.x_SetData(oData, sPath);
+    // return row count
+    return (objIndex>-1? modelRowsLen: modelRowsLen+1);
+};
+
+sap.ui.model.Model.prototype.x_SetData = function(dataObj,sPath){
+    var oData = this.getData();
+    var dataClone = clone(dataObj);
+
+    if(!isEmpty(sPath))
+        setProperty(oData, dataClone, sPath, '/'); // this provides mirroring where as the merge supplied by SUI5 only supplies updating
+    else
+        oData = dataClone;
+
+    this.setData(oData);
+    this.checkUpdate();
+};
+
 sap.ui.model.json.JSONModel.extend("sap.uiext.model.json.JSONModel", {
 
     validateInput: function(notify){
@@ -100,10 +405,10 @@ sap.ui.model.json.JSONModel.extend("sap.uiext.model.json.JSONModel", {
 //        }
 
         //if(!args[2]){ // if sPath does not prefix with '/' fix it
-            if(!/^\//.test(sPath)){
-                args[0] = '/'+args[0];
-            }
-            args = [sPath, oValue];
+        if(!/^\//.test(sPath)){
+            args[0] = '/'+args[0];
+        }
+        args = [sPath, oValue];
         //}
 
         // Create path if it does not exist
@@ -180,3 +485,4 @@ sap.ui.model.json.JSONModel.extend("sap.uiext.model.json.JSONModel", {
     },
     renderer : {} // an empty renderer by convention inherits the parent renderer
 });
+/**!!!           END JSON Model             !!!**/
