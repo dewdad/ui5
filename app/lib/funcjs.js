@@ -174,7 +174,7 @@ function getObjProperty(obj, path, delimiter){
     for (var i = 0, parts = path.length -1 ; i < parts ; i += 1) {
         if(path[i].length>0){
             //console.log(parent);
-            parent = !!parent[path[i]].call? parent[path[i]](): parent[path[i]];
+            parent = !!parent[path[i]] && !!parent[path[i]].call? parent[path[i]](): parent[path[i]];
             if(typeof(parent)=='undefined') return undefined;
         }
     }
