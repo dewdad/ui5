@@ -178,7 +178,8 @@ function getObjProperty(obj, path, delimiter){
             if(typeof(parent)=='undefined') return undefined;
         }
     }
-    return parent[path[path.length-1]];
+    
+    return parent[path[path.length-1]].call? parent[path[path.length-1]](): parent[path[path.length-1]];
 }
 
 function createUUID() {
