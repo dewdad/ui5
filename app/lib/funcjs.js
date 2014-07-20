@@ -157,13 +157,14 @@ function getUrlVars(url) {
     return vars;
 }
 
-function getObjProperty(obj, path, delimiter){
+function getObjProperty(obj, path, bCall, delimiter){
     if(!arguments[1])
         return obj;
 
     var parent = obj;
-    if(delimiter==undefined || !!!delimiter.length || delimiter.length !== 1) // if delimter is not provided or is invalid
-        delimiter = '.';
+
+    delimiter = typeof(bCall)==='string'? bCall: (delimiter || '.');
+    bCall = bCall===false? false: true;
 
     var delimRegx = new RegExp("\\"+delimiter+'{2,}', "gi"); // fix multiple delimiters
     path = path.replace(delimRegx, delimiter);
@@ -179,7 +180,7 @@ function getObjProperty(obj, path, delimiter){
         }
     }
     var propPath = path[path.length-1];
-    return !!parent[propPath] && !!parent[propPath].call? parent[propPath](): parent[propPath];
+    return bCall && !!parent[propPath] && !!parent[propPath].call? parent[propPath](): parent[propPath];
 }
 
 function createUUID() {
