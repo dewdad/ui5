@@ -150,7 +150,7 @@ sap.ui.core.Control.extend(heremap_ns, {
     },
     openBubble: function(sDescription, oCoordinate){
         if(isEmpty(oCoordinate)) return false;
-        oCoordinate = oCoordinate.longitude
+        oCoordinate = (oCoordinate.longitude && oCoordinate)
             || getObjProperty(oCoordinate,'getParameters.hereEvt.target.coordinate')
             || getObjProperty(oCoordinate,'target.coordinate');
         this._displayComponents.InfoBubbles.openBubble(sDescription, oCoordinate);

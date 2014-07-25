@@ -8,6 +8,15 @@ sap.ui.core.Element.prototype.setPropertyFire = function(sPropertyName, oValue, 
     var toReturn = this.setPropertyFire(sPropertyName, oValue, bSuppressInvalidate);
     this.fireChange();
 };
+
+sap.ui.core.Element.prototype.getContextProperty = function(){
+    var context = this.getBindingContext();
+    if(!!context){
+        return context.oModel.getProperty(context.sPath);
+    }
+    return undefined;
+};
+
 sap.ui.core.Element.prototype.x_AddUpdateRow = function(oData,sRowBindingPath, sIdProperty){
     var model = this.getModel();
     sIdProperty = sIdProperty || 'id';
@@ -20,82 +29,6 @@ sap.ui.core.Element.prototype.x_AddUpdateRow = function(oData,sRowBindingPath, s
         jQuery.sap.log.error('Element must have a model to execute function "x_AddUpdateRow"');
     }
 };
-
-if(!!sap.ui.commons.TriStateCheckBox){
-    /**
-     * takes a bound view and model paths to checklist and checked property. It can infer the latter 2 arguments if you pass in
-     * the view who's aggregate binding contains a checkbox template
-     * @param args {sap.ui.control boundView, string checkListPath, string checkedPath}
-     */
-    sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList = function(args){
-        var triStateCbox = this;
-        if(!args || !args.boundView){
-            jQuery.sap.log.error('illegal call to sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList');
-            return;
-        }
-        if(!args.checkListPath){ // try to infer the check list path from the aggregation binding path
-            var defaultAggr = args.boundView.x_GetRecordsAggregation();
-            if(!defaultAggr){
-                jQuery.sap.log.error('call to sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList cannot infer checklist path');
-                return;
-            }
-            var aggrBindingInfo = args.boundView.getBindingInfo(defaultAggr);
-            if(!aggrBindingInfo || !aggrBindingInfo.path){
-                jQuery.sap.log.error('call to sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList cannot infer checklist path');
-                return;
-            }
-            args.checkListPath =aggrBindingInfo.path;
-        }
-        if(!args.checkedPath){ // try to infer the checked path from the binding template
-            var oAggrTemplate = aggrBindingInfo.template;
-            if(!oAggrTemplate || oAggrTemplate.getMetadata()._sClassName!=='sap.ui.commons.CheckBox'){
-                jQuery.sap.log.error('call to sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList was made with a view having no aggregate binding template or one that is not a checkbox');
-                return;
-            }
-            var cBoxBindingInfo =oAggrTemplate.getBindingInfo('checked');
-            if(!cBoxBindingInfo || !cBoxBindingInfo.path){
-                jQuery.sap.log.error('call to sap.ui.commons.TriStateCheckBox.prototype.x_RegisterCheckList cannot infer checked path for checklist items');
-                return;
-            }
-            args.checkedPath = cBoxBindingInfo.path;
-        }
-
-        //** onAfterRendering recheck list state and update the tristate parent **//
-//        var checkListState = function(){
-//
-//        };
-//        if(addEventDelegate)
-        //this.addDelegate();
-
-        oAggrTemplate.attachChange(function(){
-                var isChecked = this.getChecked();
-                if(isChecked){
-                    this.toggle("Unchecked");
-                }
-                else if(nSelectedChildren === allChildren.length){
-                    this.toggle("Checked");
-                }
-                else{
-                    this.toggle("Mixed");
-                }
-            }
-        );
-        this.attachChange(function(){
-            if (this.getSelectionState() === "Checked"){
-                for (var i = 0; i < allChildren.length; i++) {
-                    allChildren[i].setChecked(true);
-                    nSelectedChildren = allChildren.length;
-                }
-            }
-            else {
-                for (var i = 0; i < allChildren.length; i++) {
-                    allChildren[i].setChecked(false);
-                    nSelectedChildren = 0;
-                }
-            }
-        });
-    };
-}
 
 sap.ui.core.Element.prototype.x_SetData = function(oData,sPath, sModelName){
     var model = this.x_GetSetModel(sModelName);

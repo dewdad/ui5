@@ -671,6 +671,15 @@ function DateInXDays(aDate, xDays){
     return newDate;
 }
 
+Date.prototype.getUTCAnnualWeek = function() {
+    var oneJanTime = Date.UTC(this.getUTCFullYear(),0,1);
+    var firstWeekStartTime = oneJanTime - ((new Date(oneJanTime)).getUTCDay())*86400000;
+    var thisTime = this.getTime();
+    var days = (thisTime - firstWeekStartTime) / 86400000;
+    var weeks = days/7;
+    return Math.ceil(weeks);
+};
+
 var DateFunctions={
     date2yyyy_mm_dd_hh_mm_ss:function (jsDate) {
         var	tDate = jsDate || new Date(), 	year = "" + tDate.getFullYear(), month, day, hour, minute, second;

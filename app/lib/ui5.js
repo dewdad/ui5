@@ -57,7 +57,28 @@ $.sap.declare('mui');
             return ui.byId(id);
         },
         byId: function(id){
-            return typeof(id)==='string'? sap.ui.getCore().byId(id): id;
+            var ids = id.split(' ');
+            var n = ids.length;
+            var toRet;
+            if(n<2) toRet =  typeof(id)==='string'? sap.ui.getCore().byId(id): id;
+            if(!toRet){
+                var selector =
+                    $.map(ids, function(val, i){
+                        var isLast = i===(n-1);
+                        return '[id'+(isLast?'$':'*')+'="'+(isLast?'--':'')+val+'"]';
+                    }).join('');
+                var dom = $(selector);
+                var control = dom.length && dom.control();
+                if(!!control && control.length<2) toRet = control[0];
+            }
+            return toRet;
+        },
+        getDateInstance: function(sStyle){
+            return sap.ui.core.format.DateFormat.getDateInstance( {style : (style || "medium")} );
+        },
+        weekday: function(iNumber, bAbbrev){
+            var dayField = !!bAbbrev? 'aDaysAbbrev': 'aDaysWide';
+            return ui.getDateInstance()[dayField][iNumber];
         },
         /**
          *
