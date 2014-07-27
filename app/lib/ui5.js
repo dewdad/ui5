@@ -82,7 +82,7 @@ $.sap.declare('mui');
          */
         getWeek: function(oDate){
             oDate = oDate || new Date();
-            sap.ui.core.format.DateFormat.getDateInstance({pattern : "w"}).format(oDate);
+            return sap.ui.core.format.DateFormat.getDateInstance({pattern : "w"}).format(oDate);
         },
         weekday: function(iNumber, bAbbrev){
             var dayField = !!bAbbrev? 'aDaysAbbrev': 'aDaysWide';
