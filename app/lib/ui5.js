@@ -45,17 +45,6 @@ $.sap.declare('mui');
     };
 
     ui = {
-        /**
-         * tree path for view selection
-         */
-        byNestedId: function(){
-            var viewIdArr = Array.prototype.slice.call(arguments);
-            var viewId = viewIdArr.join('--');
-            return ui.byId(viewId);
-        },
-        getControl: function(id){
-            return ui.byId(id);
-        },
         byId: function(id){
             var ids = id.split(' ');
             var n = ids.length;
@@ -72,6 +61,13 @@ $.sap.declare('mui');
                 if(!!control && control.length<2) toRet = control[0];
             }
             return toRet;
+        },
+        toggleVisibility: function(){
+            $.each(arguments, function( index, value ) {
+                if(!!value.getVisible){
+                    value.setVisible(!value.getVisible());
+                }
+            });
         },
         getDateInstance: function(sStyle){
             return sap.ui.core.format.DateFormat.getDateInstance( {style : (style || "medium")} );
