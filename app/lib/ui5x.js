@@ -9,7 +9,8 @@ sap.ui.core.Element.prototype.setPropertyFire = function(sPropertyName, oValue, 
     this.fireChange();
 };
 
-sap.ui.core.Element.prototype.getContextProperty = function(){
+sap.ui.core.Element.prototype.getContextProperty =
+sap.ui.core.Element.prototype.getBoundProperty = function(){
     var context = this.getBindingContext();
     if(!!context){
         return context.oModel.getProperty(context.sPath);
