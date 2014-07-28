@@ -70,7 +70,7 @@ $.sap.declare('mui');
             });
         },
         getDateInstance: function(sStyle){
-            return sap.ui.core.format.DateFormat.getDateInstance( {style : (style || "medium")} );
+            return sap.ui.core.format.DateFormat.getDateInstance( {style : (sStyle || "medium")} );
         },
         /**
          * @dependecies Date.prototype.getWeek
@@ -148,6 +148,44 @@ $.sap.declare('mui');
         }
 
     };
+
+    //var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "dd/MM/yyyy HH:mm"}); //Returns a DateFormat instance for date and time
+    //var oDateFormat = sap.ui.core.format.DateFormat.getInstance({pattern: "dd/MM/yyyy"}); //Returns a DateFormat instance for date
+    //var oDateFormat = sap.ui.core.format.DateFormat.getTimeInstance({pattern: "HH:mm"}); //Returns a DateFormat instance for time
+
+    var oIn = ui;
+    // timezoneOffset is in hours convert to milliseconds
+    var TZOffsetMs = new Date(0).getTimezoneOffset() * 60 * 1000;
+
+    // SAPUI5 formatters
+    oIn.dateFormat = function(config){
+        return sap.ui.core.format.DateFormat.getDateInstance(config);//({pattern: pattern || "dd/MM/yyyy" });
+    };
+
+    oIn.timeFormat = function(config){
+        config = $.extend({style: 'short'}, config || {});
+        return sap.ui.core.format.DateFormat.getTimeInstance(config);//({pattern: pattern || "KK:mm:ss a"});
+    };
+
+    // format date and time to strings offsetting to GMT
+    oIn.dateStr = function(oDate, config){
+        var formatArgs = [new Date(oDate.getTime() + TZOffsetMs)];
+        var formatObj = oIn.dateFormat(config);
+        if(typeof(bUTC)==="boolean") formatArgs.push(bUTC);
+        return formatObj.format.apply(formatObj,formatArgs);
+    };
+    oIn.timeStr = function(oTime, config, bUTC){
+        var formatArgs = [new Date(oTime.ms + TZOffsetMs)];
+        var formatObj = oIn.timeFormat(config);
+        if(typeof(bUTC)==="boolean") formatArgs.push(bUTC);
+        return formatObj.format.apply(formatObj,formatArgs);
+    }  //11:00 AM
+    //parse back the strings into date object back to Time Zone
+//    var parsedDate = new Date(dateFormat.parse(dateStr).getTime() - TZOffsetMs); //1354665600000
+//    var parsedTime = new Date(timeFormat.parse(timeStr).getTime() - TZOffsetMs); //39600000
+    //Note to SAPUI5 developers DateFormat.format has a to UTC flag, DateFormat.parse could use a from UTC flag.
+
+
     mui={
         HSpacer: function(sSpace){
           return new sap.m.HBox({width: '100%', height:sSpace || '10px'});
