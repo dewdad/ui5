@@ -10,10 +10,10 @@ sap.ui.core.Element.prototype.setPropertyFire = function(sPropertyName, oValue, 
 };
 
 sap.ui.core.Element.prototype.getContextProperty =
-sap.ui.core.Element.prototype.getBoundProperty = function(){
+sap.ui.core.Element.prototype.getBoundProperty = function(sPath){
     var context = this.getBindingContext();
     if(!!context){
-        return context.oModel.getProperty(context.sPath);
+        return context.oModel.getProperty(context.sPath+(!!sPath? ('/'+sPath): ''));
     }
     return undefined;
 };
@@ -198,7 +198,7 @@ $.sap.require('sap.ui.model.odata.ODataListBinding');
 /**
  * Adds support to the ODataListBinding type to search on OData service endpoints.
  * it does so by building a specialized filter that is later extracted before XHR open and replaced
- * with a valid logical contains statement chained by "or" operator. It saves
+ * with a valid logical contains statement chained by "or" operator.
  * @param aFields   An array of strings corresponding to the service entity fields to be included in the search
  * @param sQuery    The search term
  */
