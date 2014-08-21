@@ -7,9 +7,9 @@ Overview
 -------------
 ### Features
 - **Grunt connect proxy with a fallback on public [corsproxy.com](http://www.corsproxy.com/) when not using Grunt.js**
-*This will allow you to will allow you to easily work against 3rd party domains without worrying about CORS* 	 
+	*This will allow you to will allow you to easily work against 3rd party domains without worrying about CORS* 	 
 - **Dynamic Routing**
-*Takes a convention-over-configuration approach to routing, there are no pre-configured routes configured for any of the featured demos, e.g [Products](http://randelic.github.io/ui5/app/#/Product), or [Product Detail](http://randelic.github.io/ui5/app/#/Product)*
+	*Takes a convention-over-configuration approach to routing, there are no pre-configured routes configured for any of the featured demos, e.g [Products](http://randelic.github.io/ui5/app/#/Product), or [Product Detail](http://randelic.github.io/ui5/app/#/Product)*
 - **OData search**
 - **Controller hirearchy with abstract base controller with support for:**
 	- constructor and init chaining,
