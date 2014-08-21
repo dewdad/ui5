@@ -2,6 +2,8 @@ UI5 Playground!
 ===================
 
 
+This application is meant to be a starting place for UI5 development. It is a collection of practical web development solutions to common problems/requirements encounted by SAPUI5/OpenUI5 developers.
+
 Hello, I'm your first Markdown document in **StackEdit**[^stackedit]. Don't delete me, I can be helpful. I can be recovered anyway in the **Utils** tab of the <i class="icon-cog"></i> **Settings** dialog.
 
 ----------
