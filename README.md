@@ -1,4 +1,4 @@
-Welcome to StackEdit!
+UI5 Playground!
 ===================
 
 
@@ -126,17 +126,17 @@ Markdown Extra
 
 Item     | Value
 -------- | ---
-Computer | $1600
-Phone    | $12
-Pipe     | $1
+Computer | ₪5,585.13
+Phone    | ₪41.89
+Pipe     | ₪3.49
 
 You can specify column alignment with one or two colons:
 
 | Item     | Value | Qty   |
 | :------- | ----: | :---: |
-| Computer | $1600 |  5    |
-| Phone    | $12   |  12   |
-| Pipe     | $1    |  234  |
+| Computer | ₪5,585.13 |  5    |
+| Phone    | ₪41.89   |  12   |
+| Pipe     | ₪3.49    |  234  |
 
 
 ### Definition Lists
