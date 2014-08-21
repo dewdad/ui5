@@ -20,5 +20,12 @@ Overview
 - **Model inheritance hierarchy for fragments and fragment-dialogs**
 - **Static filter management on OData bindings**
 
-The playground depends on [UI5lib](https://github.com/randelic/ui5lib), which is a collection of libraries that complement UI5 development.
+The playground depends on [ui5lib](https://github.com/randelic/ui5lib), which is a collection of libraries that complement the UI5 framework.
+
+> **ui5lib Overview**
+> 
+> - **func.js** Functional JavaScript library to complete functionality missing from jQuery, has some prototype enrichment
+> - **ui5.js** UI5 helper function given in the "ui" namespace.
+> - **ui5x** Extensions and enhancements to SAPUI5 framework objects, such as OData search and static OData filters.
+> - **base/Controller.js** An abstract base controller for all of your application controllers. It extends sap.ui.core.mvc.Controller with additionaly APIs for method chaining, model management, simple routing and route matching, simple i18n, etc...
 
