@@ -29,3 +29,12 @@ The playground depends on [ui5lib](https://github.com/randelic/ui5lib), which is
 > - **ui5x** Extensions and enhancements to SAPUI5 framework objects, such as OData search and static OData filters.
 > - **base/Controller.js** An abstract base controller for all of your application controllers. It extends sap.ui.core.mvc.Controller with additionaly APIs for method chaining, model management, simple routing and route matching, simple i18n, etc...
 
+###Usage
+
+1. Develop locally
+ 1. Clone or download
+ 2. In the repository root run
+ ```$ npm install
+ $ grunt server
+ ```
+2. View on web [here](http://randelic.github.io/ui5/app/)
