@@ -1,7 +1,0 @@
-<View controllerName="app.view.CoverageMap"
-    xmlns="sap.ui.core.mvc"
-    xmlns:lib="app.lib">
-
-    <lib:HereMap  displaySearch="true" displayReady="onMapReady" markerPress="onMarkerPress" markerHover="onMarkerHover" displayComponents="ZoomBar,Behavior,InfoBubbles" counterFields="counterField"></lib:HereMap>
-
-</View>
