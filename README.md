@@ -126,17 +126,17 @@ Markdown Extra
 
 Item     | Value
 -------- | ---
-Computer | ₪5,585.13
-Phone    | ₪41.89
-Pipe     | ₪3.49
+Computer | $1600
+Phone    | $12
+Pipe     | $1
 
 You can specify column alignment with one or two colons:
 
 | Item     | Value | Qty   |
 | :------- | ----: | :---: |
-| Computer | ₪5,585.13 |  5    |
-| Phone    | ₪41.89   |  12   |
-| Pipe     | ₪3.49    |  234  |
+| Computer | $1600 |  5    |
+| Phone    | $12   |  12   |
+| Pipe     | $1    |  234  |
 
 
 ### Definition Lists
