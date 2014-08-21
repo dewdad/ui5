@@ -1,0 +1,20 @@
+<mvc:View controllerName="HereMap.Master"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:HereMap="HereMap">
+
+    <Page
+            id="page"
+            title="Here map with composite clustering">
+    <content>
+    <VBox
+            width="100%"
+            direction="Column">
+    <items>
+    <HereMap:HereMap height="800px" displaySearch="true" displayReady="onMapReady" markerPress="onMarkerPress" markerHover="onMarkerHover" displayComponents="ZoomBar,Behavior,InfoBubbles" counterFields="counterField"/>
+    </items>
+    </VBox>
+    </content>
+    </Page>
+
+</mvc:View>

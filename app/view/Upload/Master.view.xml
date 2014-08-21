@@ -1,0 +1,40 @@
+<core:View xmlns:core="sap.ui.core"
+           xmlns="sap.m" xmlns:ui="sap.ca.ui" controllerName="Upload.Master" height="100%">
+  <Page id="page" showHeader="false">
+    <content>
+      <ui:FileUpload
+        acceptRequestHeader="application/json"
+        id="fileupload"
+        items="/dataitems"
+        uploadUrl="/uilib-sample/upload"
+        encodeUrl="/sap/bc/ui2/encode_file"
+        fileName="filename"
+        size="size"
+        url="url"
+        uploadedDate="uploaded"
+        contributor="contributor"
+        mimeType="mimeType"
+        fileId="documentId"
+        deleteFile="onDeleteFile"
+        renameFile="onRenameFile"
+        uploadFile="onUploadFile"
+        saveClicked="onSaveClicked"
+        cancelClicked="onCancelClicked"
+        fileUploadFailed="onFileUploadFailed"
+        useMultipart="true"
+        beforeUploadFile="onBeforeUploadFile"
+        renameEnabled="true"
+        showNoData="false"
+        useEditControls="true"
+        uploadEnabled="true"
+        editMode="false"
+        showAttachmentsLabelInEditMode="true">
+      </ui:FileUpload>
+
+    </content>
+    <footer>
+      <Bar id="footerBar">
+      </Bar>
+    </footer>
+  </Page>
+</core:View>

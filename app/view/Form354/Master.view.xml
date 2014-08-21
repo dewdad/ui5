@@ -1,0 +1,19 @@
+<mvc:View
+  height="100%"
+  controllerName="Form354.Master"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+  <Page
+    id="idFormContainer"
+    showHeader="false" >
+    <footer>
+      <Bar>
+        <contentRight>
+          <Button id="idButtonEdit" text="Edit" press="handleFooterBarButtonPress" />
+          <Button id="idButtonSave" text="Save" type="Emphasized" visible="false" press="handleFooterBarButtonPress" />
+          <Button id="idButtonCancel" text="Cancel" visible="false" press="handleFooterBarButtonPress" />
+        </contentRight>
+      </Bar>
+    </footer>
+  </Page>
+</mvc:View>

@@ -1,0 +1,17 @@
+<core:View controllerName="view.Home"
+                      xmlns="sap.m"
+                      xmlns:core="sap.ui.core" >
+    <TileContainer id="tileCont" editable="false" allowAdd="false" tiles="{/TileCollection}">
+        <tiles>
+            <StandardTile
+                    press="handleTileTap"
+                    icon="sap-icon://{icon}"
+                    type="{type}"
+                    number="{number}"
+                    numberUnit="{numberUnit}"
+                    title="{title}"
+                    info="{info}"
+                    infoState="{infoState}" />
+        </tiles>
+    </TileContainer>
+</core:View>
