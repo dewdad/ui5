@@ -1,8 +1,7 @@
 UI5 Playground!
 ===================
 
-This application is meant to be a starting place for UI5 development. It is a collection of practical web development solutions to common problems/requirements encounted by SAPUI5/OpenUI5 developers.
-----------
+>This application is meant to be a starting place for UI5 development. It is a collection of practical web development solutions to common problems/requirements encounted by SAPUI5/OpenUI5 developers.
 
 Overview
 -------------
