@@ -48,6 +48,23 @@ sap.ui.core.Control.extend(heremap_ns, {
         //oRm.renderControl(oControl._html);
         oRm.write("</div>");
     },
+    updateHeight: function(){
+        var self = this, selfH = self.getHeight(), parent, zoom;
+        var height = (!isEmpty(parent = self.getParent().getDomRef()) && parent.style.height) ||  (parent = $('#'+self.getId()).parent()).css('height');
+        if(selfH === "100%" || parseInt(selfH) !== parseInt(height)) {
+
+            zoom = parseInt((parseInt(height) / 300).toFixed(0));
+            self.setHeight(height).setZoomLevel(zoom).setMinZoomLevel(zoom);
+
+            // TODO: resizing on the parent does not occur when shrinking window, need to shrink map accordingly
+            /*if (!self._sResizeListenerId) {
+                self._sResizeListenerId = sap.ui.core.ResizeHandler.register(self.getParent().getDomRef(),  jQuery.proxy(self.updateHeight, self));
+            }*/
+        }
+    },
+    onBeforeRendering: function(){
+
+    },
     onAfterRendering : function() {
         var that = this;
         //if (!this.initialized) {      // after the first rendering initialize the map
@@ -75,14 +92,18 @@ sap.ui.core.Control.extend(heremap_ns, {
             var componentsArr = that.getDisplayComponents();
             var components = $.map(componentsArr, function(v){return that._displayComponents[v] = new nokia.maps.map.component[v]();});
 
+            that.updateHeight();
+
             // map display options
             var options = {
-                zoomLevel:that.getZoomLevel(),
+                zoomLevel: that.getZoomLevel(),
                 minZoomLevel: that.getMinZoomLevel(),
                 center: [that.getLatitude(),that.getLongitude()],
                 components: components
                 //,baseMapType: baseMapProvider
             };
+
+
             that._map = new nokia.maps.map.Display(
                 $.sap.domById(that.getId()),
                 options

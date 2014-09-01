@@ -1,9 +1,12 @@
 {
     "TileCollection": [
         {
-            "title": "Form 3:5:4",
-            "viewDir": "Form354",
-            "icon": "form",
+            "title": "HereMap Map Control",
+            "viewDir": "HereMap",
+            "viewtype": "xml",
+            "icon": "map",
+            "infoState": "Success",
+            "number": "",
             "type": "None"
         },
         {
@@ -14,12 +17,9 @@
             "type": "None"
         },
         {
-            "title": "HereMap Map Control",
-            "viewDir": "HereMap",
-            "viewtype": "xml",
-            "icon": "map",
-            "infoState": "Success",
-            "number": "",
+            "title": "Form 3:5:4",
+            "viewDir": "Form354",
+            "icon": "form",
             "type": "None"
         },
         {

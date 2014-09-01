@@ -7,13 +7,13 @@
             id="page"
             title="Here map with composite clustering">
     <content>
-    <VBox
+<!--    <VBox
             width="100%"
             direction="Column">
-    <items>
-    <HereMap:HereMap height="800px" displaySearch="true" displayReady="onMapReady" markerPress="onMarkerPress" markerHover="onMarkerHover" displayComponents="ZoomBar,Behavior,InfoBubbles" counterFields="counterField"/>
-    </items>
-    </VBox>
+    <items>-->
+    <HereMap:HereMap displaySearch="true" displayReady="onMapReady" markerPress="onMarkerPress" markerHover="onMarkerHover" displayComponents="ZoomBar,Behavior,InfoBubbles" counterFields="counterField"/>
+<!--    </items>
+    </VBox>-->
     </content>
     </Page>
 

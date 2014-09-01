@@ -24,41 +24,43 @@
     }'></script>
 
     <script>
-        var CORS_PROXY_HOSTS = [
-            "services.odata.org", // http://services.odata.org/V2/Northwind/Northwind.svc
-            "demos.telerik.com", // https://demos.telerik.com/kendo-ui/service/Northwind.svc
-        ];
+        if(jQuery.sap.getUriParameters().get("responderOn") !== "true") {
+            var CORS_PROXY_HOSTS = [
+                "services.odata.org", // http://services.odata.org/V2/Northwind/Northwind.svc
+                "demos.telerik.com" // https://demos.telerik.com/kendo-ui/service/Northwind.svc
+            ];
 
-        (function(fn) {
-            window.XMLHttpRequest.prototype.open = function() {
-                console.log( "Open Request", arguments );
-                if(arguments[1].search(new RegExp(CORS_PROXY_HOSTS.join("|"), "mgi"))>-1){
-                    var location = document.location;
-                    var oUrl = document.createElement('a');//new URI(originalOptions.url).parts;
-                    oUrl.href = arguments[1];
-                    var newURI = oUrl.href.replace(oUrl.protocol+'//','');
+            (function (fn) {
+                window.XMLHttpRequest.prototype.open = function () {
+                    console.log("Open Request", arguments);
+                    if (arguments[1].search(new RegExp(CORS_PROXY_HOSTS.join("|"), "mgi")) > -1) {
+                        var location = document.location;
+                        var oUrl = document.createElement('a');//new URI(originalOptions.url).parts;
+                        oUrl.href = arguments[1];
+                        var newURI = oUrl.href.replace(oUrl.protocol + '//', '');
 
-                    if(/V2\/Northwind/.test(oUrl.href)){
-                        newURI = "services.odata.org"+newURI.replace(oUrl.host, '');
+                        if (/V2\/Northwind/.test(oUrl.href)) {
+                            newURI = "services.odata.org" + newURI.replace(oUrl.host, '');
+                        }
+                        arguments[1] = location.protocol + '//www.corsproxy.com/' + newURI;
+                        //arguments[1] = 'http://www.corsproxy.com/'+oUrl.href.replace(oUrl.protocol+'//','');
+
+                        //this.setRequestHeader("Authorization", "Basic " + btoa('username:pass'));
                     }
-                    arguments[1] = location.protocol+'//www.corsproxy.com/'+newURI;
-                    //arguments[1] = 'http://www.corsproxy.com/'+oUrl.href.replace(oUrl.protocol+'//','');
+                    return fn.apply(this, [].slice.call(arguments));
+                };
+            })(window.XMLHttpRequest.prototype.open);
 
-                    //this.setRequestHeader("Authorization", "Basic " + btoa('username:pass'));
+            // check for localhost proxy that runs while using Grunt server, if not found use public CORS proxy
+            $.ajax({
+                async: false,
+                url: "/V2/Northwind/Northwind.svc",
+                error: function () {
+                    console.log("checking services failure", arguments);
+                    CORS_PROXY_HOSTS.push("V2/Northwind");
                 }
-                return fn.apply(this, [].slice.call(arguments));
-            };
-        })(window.XMLHttpRequest.prototype.open);
-
-        // check for localhost proxy that runs while using Grunt server, if not found use public CORS proxy
-        $.ajax({
-            async: false,
-            url: "/V2/Northwind/Northwind.svc",
-            error: function(){
-                console.log("checking services failure", arguments);
-                CORS_PROXY_HOSTS.push("V2/Northwind");
-            }
-        })
+            });
+        }
     </script>
 
     <script src="//randelic.github.io/ui5lib/funcjs.js" type="text/javascript"></script>

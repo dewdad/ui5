@@ -16,8 +16,8 @@
                 resourceBundle : "i18n/messageBundle.properties",
                  serviceConfig : {
                      name : "Northwind",
-                    //serviceUrl : "/uilib-sample/proxy/http/services.odata.org/V2/(S(sapuidemotdg))/OData/OData.svc/"
-                     serviceUrl : "/V2/Northwind/Northwind.svc/"
+                    //serviceUri : "/uilib-sample/proxy/http/services.odata.org/V2/(S(sapuidemotdg))/OData/OData.svc/"
+                     serviceUri : "/V2/Northwind/Northwind.svc/"
                  }
             },
 
@@ -73,8 +73,25 @@
             /*this.routeHandler = new sap.m.routing.RouteMatchedHandler(this.getRouter());*/
             this.getRouter().initialize();
 
+            var sServiceUrl = this.getConfig("serviceConfig.serviceUri");
+
+            var bIsMocked = jQuery.sap.getUriParameters().get("responderOn") === "true";
+            // start the mock server for the domain model
+            if (bIsMocked) {
+                jQuery.sap.require("sap.ui.app.MockServer");
+                var oMockServer = new sap.ui.app.MockServer({
+                    rootUri: sServiceUrl
+                });
+                oMockServer.simulate("model/metadata.xml", "model/");
+                oMockServer.start();
+
+                sap.m.MessageToast.show("Running in demo mode with mock data.", {
+                    duration: 2000
+                });
+            }
+
             // oData endpoint init
-            endpoint = sap.ui.model.odata.ODataModel(this.getConfig("serviceConfig.serviceUrl"), true);
+            endpoint = sap.ui.model.odata.ODataModel(sServiceUrl, true);
             this.setModel(endpoint);
 
             // i18n model init
