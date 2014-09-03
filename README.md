@@ -34,7 +34,8 @@ The playground depends on [ui5lib](https://github.com/randelic/ui5lib), which is
 1. Develop locally
  1. Clone or download
  2. In the repository root run
- ```$ npm install
+ ```
+ $ npm install
  $ grunt server
  ```
 2. View on web [here](http://randelic.github.io/ui5/app/)
