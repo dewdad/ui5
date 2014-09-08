@@ -39,3 +39,25 @@ The playground depends on [ui5lib](https://github.com/randelic/ui5lib), which is
  $ grunt server
  ```
 2. View on web [here](http://randelic.github.io/ui5/app/)
+ 
+
+
+## <a name="h.ga7qarafaaxj"></a><span>Notes</span>
+
+### <a name="h.14dkl2fyl983"></a><span>Performance</span>
+
+<span>Performance was completely ignored as of this writing, but this will change. Feel free to apply any performance enhancements and contribute back to either of the projects, “</span><span class="c15">[UI5 Playground](https://www.google.com/url?q=https%3A%2F%2Fgithub.com%2Frandelic%2Fui5&sa=D&sntz=1&usg=AFQjCNEWBbX0seE6OZe0Rg4SGRzunUEY9Q)</span><span>” or “</span><span class="c15">[ui5lib](https://www.google.com/url?q=https%3A%2F%2Fgithub.com%2Frandelic%2Fui5lib&sa=D&sntz=1&usg=AFQjCNEnx299EJDSGzPcUelLBDC4pjdiTg)</span><span>”. More in the roadmap.</span>
+
+### <a name="h.ixx0zfs6gpm8"></a><span>Disclosure</span>
+
+<span>Though I work at SAP the projects presented here do not present official guidelines for SAP/OpenUI5 development. I have not yet had the time to collaborate with SAPUI5 team on this, though I would very much would like to. I’m looking forward to collaborating with anyone with a passion for web and/or mobile development that wants to contribute to SAPUI5 development.</span>
+
+## <a name="h.mxiodk5rk0jd"></a><span>Roadmap</span>
+
+*   <span>Automated testing on Node.js with Selenium - great for multi-platfom and design-time as well as testing from CI like Jenkins</span>
+*   <span>Better SoC and Bundling of optimized packages in ui5lib for app consumption</span>
+*   <span>Data mocking using the SAPUI5 mock server component</span>
+*   <span>Improved dynamic/convention routing.
+    improved performance via overridable defaults for convention lookup.</span>
+*   <span>New controls for in common client application scenarios (such as the HereMap control demoed </span><span class="c15">[here](http://www.google.com/url?q=http%3A%2F%2Frandelic.github.io%2Fui5%2Fapp%2F%23%2FHereMap&sa=D&sntz=1&usg=AFQjCNGUmgXxsXiWLER7XbHD4gjYmA8bMA)</span><span>)</span>
+*   <span>More documentation and posts</span>
