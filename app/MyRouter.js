@@ -134,11 +134,16 @@ sap.ui.core.routing.Router.extend("ui5app.MyRouter", {
    * @return {sap.ui.core.mvc.View} Either the view or undefined if no view was created
    */
   addConventionView: function(viewOpt, fileNames){
-    var viewResource = viewOpt.viewPath.replace('/','.');
-    var that = this;
-    var viewResourcePath = $.sap.getModulePath(this._oConfig.viewPath);
-    var conventionResourcePath = viewResourcePath + '/' + viewOpt.viewPath;
-    $.sap.registerResourcePath(viewResource, conventionResourcePath);
+    try {
+      var viewResource = viewOpt.viewPath.replace('/', '.');
+      var that = this;
+      var viewResourcePath = $.sap.getModulePath(this._oConfig.viewPath);
+      var conventionResourcePath = viewResourcePath + '/' + viewOpt.viewPath;
+      $.sap.registerResourcePath(viewResource, conventionResourcePath);
+    }catch(e){
+      console.debug(e);
+      return false;
+    }
     //this.setView(viewName, ui.view(viewName));
 
     // Iterate over possible main view names
