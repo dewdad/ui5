@@ -37,13 +37,16 @@ sap.ui.core.routing.Router.extend("ui5app.MyRouter", {
     // Here is the routing entry point for programmatic navigation (for lack of finding a better one).
     // Check for a name in this._oRoutes object. If it does not exist, try to create a view. On successful view creation
     // build a route with the view
-    var RouteName;
-    var hash = this.oHashChanger.getHash();
-    if (!this._oRoutes[sName]) {
-      RouteName = this.processConventionNavRoute(sName, oParameters);
+    if(!isEqual(arguments, this._lastNav)) { // TODO: workaround to fix redundant nav events on redundant UI events (found when tapping on tile)
+      this._lastNav = arguments;
+      var RouteName;
+      var hash = this.oHashChanger.getHash();
+      if (!this._oRoutes[sName]) {
+        RouteName = this.processConventionNavRoute(sName, oParameters);
+      }
+      console.debug('MyRouter.navTo', {hash: hash, arguments: arguments});
+      return sap.ui.core.routing.Router.prototype.navTo.call(this, RouteName || sName, oParameters, bReplace || false);
     }
-    console.debug('MyRouter.navTo', {hash: hash, arguments: arguments});
-    return sap.ui.core.routing.Router.prototype.navTo.call(this, RouteName || sName, oParameters, bReplace || false);
   },
 
   getHashPath: function(sHash){
