@@ -8,21 +8,22 @@ sap.ui.core.routing.Router.extend("ui5app.MyRouter", {
     sap.ui.core.routing.Router.apply(this, arguments);
     this._oRouteMatchedHandler = new sap.m.routing.RouteMatchedHandler(this);
 
-    var that = this;
+    var self = this;
     var fn = this._oRouter._getMatchedRoutes;
     $.each(this._oRouter._routes, function(){
       if(/all\*/.test(this._pattern)){
-        that._catchAllRoute = this;
+                self._catchAllRoute = this;
       }
     });
 
     this._oRouter._getMatchedRoutes = function(sHash){
       var routes = fn.apply(this, arguments);
       if(routes.length && routes.length>1){
-        var carIndex = arrayFindByKey(routes, 'route', that._catchAllRoute).index;
+                var carIndex = arrayFindByKey(routes, 'route', self._catchAllRoute).index;
         routes.splice(carIndex,1);
-      }else if(!routes[0] || routes[0].route === that._catchAllRoute){
-        if(that.processConventionHashRoute(sHash)) return this._getMatchedRoutes.apply(this, arguments);
+            }else if(!routes[0] || routes[0].route === self._catchAllRoute){
+                self._lastNav = sHash;
+                if(self.processConventionHashRoute(sHash)) return this._getMatchedRoutes.apply(this, arguments);
       }
       console.debug({sHash:sHash, routes: routes});
       return routes;
@@ -234,9 +235,11 @@ sap.ui.core.routing.Router.extend("ui5app.MyRouter", {
 
     //The history contains a previous entry
     if (sPreviousHash !== undefined) {
+            this._lastNav = null;
       window.history.go(-1);
     } else {
       var bReplace = true; // otherwise we go backwards with a forward history
+            this._lastNav = [sRoute, mData, bReplace];
       this.navTo(sRoute, mData, bReplace);
     }
   },
