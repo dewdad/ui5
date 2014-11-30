@@ -121,7 +121,30 @@ module.exports = function(grunt) {
         src: ['docs/**/*.md'],
         dest: 'README.md'
       }
-    }
+    },
+      jasmine_node: {
+          options: {
+              forceExit: true,
+              match: '.',
+              matchall: false,
+              extensions: 'js',
+              specNameMatcher: 'spec',
+              jUnit: {
+                  report: true,
+                  savePath : "./reports/",
+                  useDotNotation: true,
+                  consolidate: true
+              }
+          },
+          all: ['tests/jasmine/']
+      },
+      mkdir: {
+          webdriverjs: {
+              options: {
+                  create: ['reports/screenshots']
+              }
+          }
+      }
 
   });
 
@@ -138,5 +161,17 @@ module.exports = function(grunt) {
   grunt.registerTask('default', [
     'server'
   ]);
+
+    grunt.registerTask('selenium-test', function(){
+        grunt.option('force', true);
+        global["SERVER_PORT"] = SERVER_PORT;
+        grunt.task.run([
+            'mkdir:webdriverjs',
+            'configureProxies',
+            'connect:livereload',
+            'jasmine_node'
+        ]);
+        //grunt.task.run('jasmine_node');
+    });
 
 };
