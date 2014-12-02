@@ -75,22 +75,28 @@ module.exports = function(grunt) {
         hostname: 'localhost'
       },
       proxies:
-        [
-            /*{ // Uncomment this if you're behind a corporate proxy
-                context: '/V2',
-                host: 'proxy', // e.g. someproxy.com
-                port: 8080, // proxy port
-                headers: {
-                    Host: "services.odata.org" // the real host you want to access
-                },
-                changeOrigin: true
-            }*/
-            { // Uncomment this if NOT behind a corporate proxy
-              context: '/V2',
+            { // Uncomment this if you're behind a corporate proxy
+                context: '/Northwind',
+              host: 'proxy', // e.g. someproxy.com
+              https: false,
+              port: 8080, // proxy port
+              headers: {
+                Host: "services.odata.org" // the real host you want to access
+                //Host: "demos.telerik.com" // the real host you want to access
+              },
+              changeOrigin: true
+              /*,rewrite:{
+                ////'^/changingcontext': '/anothercontext'
+                "^/Northwind/Northwind.svc": "https://demos.telerik.com/aspnet-ajax/Services/NorthwindWcfService.svc"
+                //"^/Northwind/Northwind.svc": "/Northwind/Northwind.svc"
+              }*/
+            }
+            /*{ // Uncomment this if NOT behind a corporate proxy
+              context: '/Northwind',
               host: "services.odata.org",
               changeOrigin: true
-            }
-        ],
+            }*/
+        ,
       livereload: {
         options: {
           middleware: function(connect) {

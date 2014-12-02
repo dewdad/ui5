@@ -17,7 +17,7 @@
                  serviceConfig : {
                      name : "Northwind",
                     //serviceUri : "/uilib-sample/proxy/http/services.odata.org/V2/(S(sapuidemotdg))/OData/OData.svc/"
-                     serviceUri : "/V2/Northwind/Northwind.svc/"
+                     serviceUri : "/Northwind/Northwind.svc/"
                  }
             },
 
