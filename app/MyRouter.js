@@ -158,7 +158,7 @@ sap.ui.core.routing.Router.extend("ui5app.MyRouter", {
           console.debug('oview ran with owner', oView);
         }, that._oOwner);
       } else {
-        oView = ui.view(viewName);
+        oView = ui.view(viewOpt.viewName);
       }
       console.debug('checking oView value before route creation', oView);
       if(oView){
